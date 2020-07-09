@@ -97,7 +97,7 @@ type MasterStruct struct {
 func readMoister() map[string][]map[string]MasterStruct {
     calib := getCalib()
     probesList, listMap := sensorList()
-    fmt.Println(listMap)
+    // fmt.Println(listMap)
     // database row decleration
     var id int
     var sensorType string

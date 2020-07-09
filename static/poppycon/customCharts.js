@@ -306,8 +306,58 @@ $(function () {
 			}}
 			valueAvg = valueLast/i;
 
+			$( "#lightTag" ).replaceWith(" Average: " +valueAvg.toFixed(1)+"%" );
 
-			allCharts = [humidityLineChart, temperatureLineChart]
+			// CanvasJS spline area chart to show revenue from Jan 2015 - Dec 2015
+			var lightLineChart = new CanvasJS.Chart("lightLineChart", {
+				animationEnabled: true,
+				zoomEnabled: true,
+				zoomType: "xy",
+				exportEnabled: true,
+				backgroundColor: "transparent",
+				axisX: {
+					// interval: 10,
+					// intervalType: "month",
+					labelFontColor: "#717171",
+					labelFontSize: 16,
+					lineColor: "#a2a2a2",
+					minimum: new Date(param["startTime"]),
+					tickColor: "#a2a2a2",
+					valueFormatString: "HH:MM\n D/MMM/YYYY"
+				},
+				axisY: {
+					gridThickness: 0,
+					includeZero: false,
+					labelFontColor: "#717171",
+					labelFontSize: 16,
+					lineColor: "#a2a2a2",
+					suffix: "%",
+					tickColor: "#a2a2a2",
+					valueFormatString: "###.## ",
+					// minimum: -5,
+					// maximum: 40,
+				},
+				toolTip: {
+					borderThickness: 0,
+					cornerRadius: 0,
+					fontStyle: "normal",
+					valueFormatString: "HH:MM\n D/MMM/YYYY",
+					shared: true,
+				},
+				legend:{
+					cursor: "pointer",
+					//- fontSize: 16,
+					horizontalAlign: "center", // "center" , "right"
+					verticalAlign: "top",  // "top" , "bottom"
+					itemclick: toggleDataSeries
+				},
+				data: dataSeries
+			});
+
+			lightLineChart.render();
+
+
+			allCharts = [humidityLineChart, temperatureLineChart, lightLineChart]
 
 			for (var i = 0; i < allCharts.length; i++){
 

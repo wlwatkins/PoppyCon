@@ -65,7 +65,7 @@ html(lang='en')
     #page-content-wrapper.page-content-toggle
       .container-fluid
         .row
-          .col-xl-6
+          .col-xl-4
             .card.card-block
               h4.card-title.m-b-2
                 | Temperature sensors -
@@ -74,13 +74,21 @@ html(lang='en')
               #temperatureLineChart.charts
       
         
-          .col-xl-6
+          .col-xl-4
             .card.card-block
               h4.card-title.m-b-2
                 | Humidity sensors -
                 span.custom-tag.tag.m-l-1
                   #humidityTag
               #humidityLineChart.charts
+              
+          .col-xl-4
+            .card.card-block
+              h4.card-title.m-b-2
+                | Light sensors -
+                span.custom-tag.tag.m-l-1
+                  #lightTag
+              #lightLineChart.charts
         
         // /3rd row
   
