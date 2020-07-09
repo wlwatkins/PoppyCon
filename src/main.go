@@ -68,6 +68,7 @@ import (
 type Page struct {
     SensorFile  []byte
     CalibrationFile  []byte
+    ParametersFile []byte
     Message []byte
 }
 
@@ -102,15 +103,23 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
     }
 }
 
+type dataAjax struct {
+  Data map[string][]map[string]MasterStruct
+  Param string
+}
+
 func dashboardHandler(w http.ResponseWriter, r *http.Request) {
   switch r.Method {
     case "GET":
       p := &Page{}
       renderTemplate(w, "dashboard", p)
     case "POST":
-        json.NewEncoder(w).Encode(readMoister())
+      paramFile, err := loadFile("parameters.config")
+      CheckErrSend(w, err, "Could not open parameters: %s")
+      jsonData := dataAjax{Data: readMoister(), Param: fmt.Sprintf("%s", paramFile) }
+      json.NewEncoder(w).Encode(jsonData)
     default:
-        fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
+      fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
   }
 }
 
@@ -121,7 +130,9 @@ func settingsHandler(w http.ResponseWriter, r *http.Request) {
       CheckErrSend(w, err, "Could not open calibration: %s")
       sensorFile, err := loadFile("sensors.config")
       CheckErrSend(w, err, "Could not open sensors: %s")
-      p := &Page{CalibrationFile: calibFile, SensorFile: sensorFile}
+      paramFile, err := loadFile("parameters.config")
+      CheckErrSend(w, err, "Could not open parameters: %s")
+      p := &Page{CalibrationFile: calibFile, SensorFile: sensorFile, ParametersFile: paramFile}
       renderTemplate(w, "settings", p)
     case "POST":
         // Call ParseForm() to parse the raw query and update r.PostForm and r.Form.
@@ -215,5 +226,5 @@ func main() {
     http.HandleFunc("/shutdown", makeHandler(shutdownHandler))
     // http.HandleFunc("/settings/save", makeHandler(settingsSaveHandler))
 
-    log.Fatal(http.ListenAndServe(":80", nil))
+    log.Fatal(http.ListenAndServe(":81", nil))
 }

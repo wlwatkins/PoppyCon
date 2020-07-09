@@ -37,7 +37,7 @@ func getCalib() map[string]CalibCSV{
   f, err := os.Open("utils/calibration.config")
   CheckErr(err, "Could not read calibration.config: %s")
   r := csv.NewReader(bufio.NewReader(f))
-
+  var cmt string
   op := make(map[string]CalibCSV)
   for {
         l, err := r.Read()
@@ -46,10 +46,14 @@ func getCalib() map[string]CalibCSV{
         } else if err != nil {
           CheckErr(err, "Error whilst reading file: %s")
         }
-        op[l[1]] =  CalibCSV{
-            ZeroPCT: l[2],
-            HundredPCT: l[3],
+        cmt = l[0][0:1]
+        if cmt != "#" {
+          op[l[1]] =  CalibCSV{
+              ZeroPCT: l[2],
+              HundredPCT: l[3],
+          }
         }
+
     }
     return op
 }
@@ -74,7 +78,6 @@ func sensorList() ([]string, map[string]string) {
           lm[l[0]] = l[1]
           sl = append(sl, l[0])
         }
-
     }
     return sl, lm
 }

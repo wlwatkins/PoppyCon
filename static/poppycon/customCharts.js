@@ -86,8 +86,21 @@ $(function () {
 		url: '',
 		type: 'POST',
 		dataType: 'json',
-		success : function(data) {
-			console.log(data)
+		success : function(rawData) {
+			console.log(rawData)
+			param = rawData['Param'].split("\r\n");
+			var param2 = {};
+			param2 = $.map(param, function(item) {
+				if(item.length>1 && item[0]!= "#"){
+				spl = item.split(',')
+				param2[spl.slice(0,1)] =  Date.parse(spl.slice(1,2));
+				return param2
+			}
+			});
+			param = param2[0]
+			console.log(param)
+
+			data = rawData['Data']
 			var dat = data["MOISTURE"]
 			var dataSeries = []
 			var valueLast = 0
@@ -121,7 +134,6 @@ $(function () {
 
 			$( "#humidityTag" ).replaceWith(" Average: " +valueAvg.toFixed(2)+"%" );
 
-
 			// CanvasJS spline area chart to show revenue from Jan 2015 - Dec 2015
 			var humidityLineChart = new CanvasJS.Chart("humidityLineChart", {
 				animationEnabled: true,
@@ -135,21 +147,21 @@ $(function () {
 					labelFontColor: "#717171",
 					labelFontSize: 16,
 					lineColor: "#a2a2a2",
-					// minimum: new Date(1594221750000),
+					minimum: new Date(param["startTime"]),
 					tickColor: "#a2a2a2",
 					valueFormatString: "HH:MM\n D/MMM/YYYY"
 				},
 				axisY: {
 					gridThickness: 0,
-					includeZero: false,
+					includeZero: true,
 					labelFontColor: "#717171",
 					labelFontSize: 16,
 					lineColor: "#a2a2a2",
 					suffix: "%",
 					tickColor: "#a2a2a2",
 					valueFormatString: "###.## ",
-					// minimum: -20,
-					// maximum: 120,
+					minimum: -20,
+					maximum: 120,
 				},
 				toolTip: {
 					borderThickness: 0,
@@ -225,21 +237,21 @@ $(function () {
 					labelFontColor: "#717171",
 					labelFontSize: 16,
 					lineColor: "#a2a2a2",
-					// minimum: new Date(1594221750000),
+					minimum: new Date(param["startTime"]),
 					tickColor: "#a2a2a2",
 					valueFormatString: "HH:MM\n D/MMM/YYYY"
 				},
 				axisY: {
 					gridThickness: 0,
-					includeZero: false,
+					includeZero: true,
 					labelFontColor: "#717171",
 					labelFontSize: 16,
 					lineColor: "#a2a2a2",
 					suffix: "°C",
 					tickColor: "#a2a2a2",
 					valueFormatString: "###.## ",
-					// minimum: -5,
-					// maximum: 40,
+					minimum: -5,
+					maximum: 40,
 				},
 				toolTip: {
 					borderThickness: 0,
@@ -259,47 +271,6 @@ $(function () {
 			});
 
 			temperatureLineChart.render();
-
-
-
-			var dat = data["LIGHT"]
-			var dataSeries = []
-			var valueLast = 0
-			var i = 0
-			for (const property in dat) {
-
-				for (const prob in dat[property]) {
-
-
-				arr = $.map(dat[property][prob]['Data'], function(v, k) {
-
-					var date = new Date(0);
-					date.setUTCSeconds(v['Date']);
-					var value = map(v['Value'], dat[property][prob]['Calib']["ZeroPCT"], dat[property][prob]['Calib']["HundredPCT"], 0, 100)
-					return [{x: date, y: value}]
-				});
-				i = i+1
-				valueLast = valueLast + arr[arr.length - 1]["y"]
-
-				dataSeries = $.merge(dataSeries, [{
-						// color: "#393f63",
-						markerSize: 0,
-						type: "line",
-						name: prob,
-						showInLegend: true,
-						dataPoints: arr
-					}]);
-
-			}}
-			valueAvg = valueLast/i;
-
-
-
-
-
-
-
-
 			allCharts = [humidityLineChart, temperatureLineChart]
 
 			for (var i = 0; i < allCharts.length; i++){
@@ -337,15 +308,6 @@ $(function () {
 			}
 
 }
-
-
-
-
-			console.log('rendered');
-
-
-
-
 
 		},
 		error: function(e){

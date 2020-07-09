@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Poppy Con - Settings</title>
+    <link rel="icon" type="image/png" href="static/img/poppyconLogo.png">
     <!-- stylesheets-->
-    <link rel="icon" type="image/png" href="static/img/poppyconLogo.png"/>
     <link href="static/fonts/font-roboto.css" rel="stylesheet">
     <link href="static/bootstrap/bootstrap4-alpha3.min.css" rel="stylesheet">
     <link href="static/font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -71,6 +71,19 @@
                 <div class="form-group">
                   <input id="calibrationName" input="hidden" name="file" value="calibration.config" hidden>
                   <textarea id="calibrationText" rows="10" input="text" name="content" class="form-control">{{printf "%s" .CalibrationFile}}</textarea>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-xl-4">
+            <div class="card card-block">
+              <form action="/settings" method="post">
+                <h4 class="card-title m-b-2">Parameters
+                  <button type="submit" class="btn btn-sm btn-info pull-right">Save file</button>
+                </h4>
+                <div class="form-group">
+                  <input id="parametersName" input="hidden" name="file" value="parameters.config" hidden>
+                  <textarea id="parametersText" rows="10" input="text" name="content" class="form-control">{{printf "%s" .ParametersFile}}</textarea>
                 </div>
               </form>
             </div>

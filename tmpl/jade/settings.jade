@@ -90,6 +90,18 @@ html(lang='en')
                   input#calibrationName(input="hidden" name="file" value="calibration.config" hidden) 
                   textarea#calibrationText.form-control(rows='10' input="text" name="content" )
                     {{printf "%s" .CalibrationFile}}
+                    
+          .col-xl-4
+            .card.card-block
+              form(action="/settings" method="post")
+                h4.card-title.m-b-2
+                  | Parameters
+                  button.btn.btn-sm.btn-info.pull-right(type='submit') Save file
+                
+                .form-group
+                  input#parametersName(input="hidden" name="file" value="parameters.config" hidden) 
+                  textarea#parametersText.form-control(rows='10' input="text" name="content" )
+                    {{printf "%s" .ParametersFile}}
                   
                     
 
