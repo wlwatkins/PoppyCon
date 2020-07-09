@@ -15,7 +15,8 @@ import sys
 
 if __name__ == "__main__":
     SENSORTYPE = {  "0": "moisture",
-                    "1": "temperature"}
+                    "1": "temperature",
+                    "2": "light"}
     if sys.argv[1] == "-h" or sys.argv[1] == "help":
         print("""
         python calibration.py X Y

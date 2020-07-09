@@ -153,15 +153,15 @@ $(function () {
 				},
 				axisY: {
 					gridThickness: 0,
-					includeZero: true,
+					includeZero: false,
 					labelFontColor: "#717171",
 					labelFontSize: 16,
 					lineColor: "#a2a2a2",
 					suffix: "%",
 					tickColor: "#a2a2a2",
 					valueFormatString: "###.## ",
-					minimum: -20,
-					maximum: 120,
+					// minimum: -20,
+					// maximum: 120,
 				},
 				toolTip: {
 					borderThickness: 0,
@@ -243,15 +243,15 @@ $(function () {
 				},
 				axisY: {
 					gridThickness: 0,
-					includeZero: true,
+					includeZero: false,
 					labelFontColor: "#717171",
 					labelFontSize: 16,
 					lineColor: "#a2a2a2",
 					suffix: "°C",
 					tickColor: "#a2a2a2",
 					valueFormatString: "###.## ",
-					minimum: -5,
-					maximum: 40,
+					// minimum: -5,
+					// maximum: 40,
 				},
 				toolTip: {
 					borderThickness: 0,
@@ -271,6 +271,42 @@ $(function () {
 			});
 
 			temperatureLineChart.render();
+
+
+
+
+			var dat = data["LIGHT"]
+			var dataSeries = []
+			var valueLast = 0
+			var i = 0
+			for (const property in dat) {
+
+				for (const prob in dat[property]) {
+
+
+				arr = $.map(dat[property][prob]['Data'], function(v, k) {
+
+					var date = new Date(0);
+					date.setUTCSeconds(v['Date']);
+					var value = map(v['Value'], dat[property][prob]['Calib']["ZeroPCT"], dat[property][prob]['Calib']["HundredPCT"], 0, 100)
+					return [{x: date, y: value}]
+				});
+				i = i+1
+				valueLast = valueLast + arr[arr.length - 1]["y"]
+
+				dataSeries = $.merge(dataSeries, [{
+						// color: "#393f63",
+						markerSize: 0,
+						type: "line",
+						name: prob,
+						showInLegend: true,
+						dataPoints: arr
+					}]);
+
+			}}
+			valueAvg = valueLast/i;
+
+
 			allCharts = [humidityLineChart, temperatureLineChart]
 
 			for (var i = 0; i < allCharts.length; i++){
