@@ -1,0 +1,16 @@
+Adafruit-Blinka==5.2.0
+adafruit-circuitpython-ads1x15==2.2.2
+adafruit-circuitpython-busdevice==4.3.1
+Adafruit-PlatformDetect==2.14.1
+Adafruit-PureIO==1.1.5
+click==7.1.2
+peewee==3.13.3
+pkg-resources==0.0.0
+pyftdi==0.51.2
+pyserial==3.4
+pyusb==1.0.2
+rpi-ws281x==4.2.4
+RPi.GPIO==0.7.0
+SQLAlchemy==1.3.18
+sysv-ipc==1.0.1
+w1thermsensor==1.3.0

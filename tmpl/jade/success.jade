@@ -1,0 +1,77 @@
+//output:../success.html, pretty:true
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title Poppy Con - Settings
+    link(rel='icon', type='image/png', href='static/img/poppyconLogo.png')
+    // stylesheets
+    link(href='static/fonts/font-roboto.css', rel='stylesheet')
+    link(href='static/bootstrap/bootstrap4-alpha3.min.css', rel='stylesheet')
+    link(href='static/font-awesome/css/font-awesome.min.css', rel='stylesheet')
+    link(href='static/poppycon/style.css', rel='stylesheet')
+    // scripts
+    script(src='static/jquery/jquery.min.js')
+    script(src='static/tether/tether.min.js')
+    script(src='static/bootstrap/bootstrap4-alpha3.min.js')
+    script(src='static/canvasjs/canvasjs.min.js')
+    script(src='static/poppycon/main.js')
+
+  body
+    // header
+    nav#header.navbar.navbar-fixed-top
+      .container-fluid
+        .navbar-header
+          #sidebar-toggle-button
+            i.fa.fa-bars(aria-hidden='true')
+          .brand
+            a(href='/')
+              span.hidden-xs-down.m-r-3 Poppy Con
+              span.lead Settings
+    // /header
+    // sidebar
+    #sidebar.sidebar-toggle
+      ul.nav.nav-sidebar
+        li
+          a(href='/')
+            i.fa.fa-tachometer.fa-lg.fa-fw(aria-hidden='true')
+            span Dashboard
+        li.divider(role='separator')
+        li
+          a.active(href='/settings')
+            i.fa.fa-cogs.fa-lg.fa-fw(aria-hidden='true')
+            span Settings
+        li.divider(role='separator')
+        li
+          a(href='/systemlogs')
+            i.fa.fa-terminal.fa-lg.fa-fw(aria-hidden='true')
+            span System logs
+        li.divider(role='separator')
+        li
+          a(href='/reboot')
+            i.fa.fa-refresh.fa-lg.fa-fw(aria-hidden='true')
+            span Reboot
+        li.divider(role='separator')
+        li
+          a(href='/shutdown')
+            i.fa.fa-power-off.fa-lg.fa-fw(aria-hidden='true')
+            span Shutdown
+        li.divider(role='separator')
+    // /sidebar
+    // page-content-wrapper
+    #page-content-wrapper.page-content-toggle
+      .container-fluid
+        .row
+          .col-xl-3
+            .card.card-block
+              h4.card-title.m-b-2
+                | Success
+              {{printf "%s" .Message}}
+            
+                    
+
+        // /3rd row
+  
+      

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Poppy Con - Settings</title>
+    <!-- stylesheets-->
+    <link rel="icon" type="image/png" href="static/img/poppyconLogo.png"/>
+    <link href="static/fonts/font-roboto.css" rel="stylesheet">
+    <link href="static/bootstrap/bootstrap4-alpha3.min.css" rel="stylesheet">
+    <link href="static/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="static/poppycon/style.css" rel="stylesheet">
+    <!-- scripts-->
+    <script src="static/jquery/jquery.min.js"></script>
+    <script src="static/tether/tether.min.js"></script>
+    <script src="static/bootstrap/bootstrap4-alpha3.min.js"></script>
+    <script src="static/canvasjs/canvasjs.min.js"></script>
+    <script src="static/poppycon/main.js"></script>
+  </head>
+  <body>
+    <!-- header-->
+    <nav id="header" class="navbar navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <div id="sidebar-toggle-button"><i aria-hidden="true" class="fa fa-bars"></i></div>
+          <div class="brand"><a href="/"><span class="hidden-xs-down m-r-3">Poppy Con</span><span class="lead">Settings</span></a></div>
+        </div>
+      </div>
+    </nav>
+    <!-- /header-->
+    <!-- sidebar-->
+    <div id="sidebar" class="sidebar-toggle">
+      <ul class="nav nav-sidebar">
+        <li><a href="/"><i aria-hidden="true" class="fa fa-tachometer fa-lg fa-fw"></i><span>Dashboard</span></a></li>
+        <li role="separator" class="divider"></li>
+        <li><a href="/settings" class="active"><i aria-hidden="true" class="fa fa-cogs fa-lg fa-fw"></i><span>Settings</span></a></li>
+        <li role="separator" class="divider"></li>
+        <li><a href="/systemlogs"><i aria-hidden="true" class="fa fa-terminal fa-lg fa-fw"></i><span>System logs</span></a></li>
+        <li role="separator" class="divider"></li>
+        <li><a href="/reboot"><i aria-hidden="true" class="fa fa-refresh fa-lg fa-fw"></i><span>Reboot</span></a></li>
+        <li role="separator" class="divider"></li>
+        <li><a href="/shutdown"><i aria-hidden="true" class="fa fa-power-off fa-lg fa-fw"></i><span>Shutdown</span></a></li>
+        <li role="separator" class="divider"></li>
+      </ul>
+    </div>
+    <!-- /sidebar-->
+    <!-- page-content-wrapper-->
+    <div id="page-content-wrapper" class="page-content-toggle">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-xl-4">
+            <div class="card card-block">
+              <form action="/settings" method="post">
+                <h4 class="card-title m-b-2">Sensors
+                  <button type="submit" class="btn btn-sm btn-info pull-right">Save file</button>
+                </h4>
+                <div class="form-group">
+                  <input id="sensorName" input="hidden" name="file" value="sensors.config" hidden>
+                  <textarea id="sensorText" rows="10" input="text" name="content" class="form-control">{{printf "%s" .SensorFile}}</textarea>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-xl-4">
+            <div class="card card-block">
+              <form action="/settings" method="post">
+                <h4 class="card-title m-b-2">Calibration
+                  <button type="submit" class="btn btn-sm btn-info pull-right">Save file</button>
+                </h4>
+                <div class="form-group">
+                  <input id="calibrationName" input="hidden" name="file" value="calibration.config" hidden>
+                  <textarea id="calibrationText" rows="10" input="text" name="content" class="form-control">{{printf "%s" .CalibrationFile}}</textarea>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- /3rd row-->
+        
+      </div>
+    </div>
+  </body>
+</html>
