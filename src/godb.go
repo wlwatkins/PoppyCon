@@ -54,12 +54,13 @@ func getCalib() map[string]CalibCSV{
     return op
 }
 
-func sensorList() []string {
+func sensorList() ([]string, map[string]string) {
   f, err := os.Open("utils/sensors.config")
   CheckErr(err, "Could not read sensors.config: %s")
   r := csv.NewReader(bufio.NewReader(f))
 
-  var op []string
+  lm := make(map[string]string)
+  var sl []string
   for {
         l, err := r.Read()
         if err == io.EOF {
@@ -67,9 +68,10 @@ func sensorList() []string {
         } else if err != nil {
           CheckErr(err, "Error whilst reading file: %s")
         }
-        op = append(op, l[0])
+        lm[l[0]] = l[1]
+        sl = append(sl, l[0])
     }
-    return op
+    return sl, lm
 }
 
 type moisterProbe struct {
@@ -81,12 +83,13 @@ type moisterProbe struct {
 type MasterStruct struct {
   Calib CalibCSV
   Data []moisterProbe
+  Label string
 }
 
 func readMoister() map[string][]map[string]MasterStruct {
     calib := getCalib()
-    probesList := sensorList()
-
+    probesList, listMap := sensorList()
+    fmt.Println(listMap)
     // database row decleration
     var id int
     var sensorType string
@@ -97,6 +100,7 @@ func readMoister() map[string][]map[string]MasterStruct {
     var name string
     var desciption string
 
+    var label string
     var dataProbeSlice []moisterProbe
     sensors := make(map[string][]map[string]MasterStruct)
 
@@ -108,7 +112,8 @@ func readMoister() map[string][]map[string]MasterStruct {
           rows.Scan(&id, &sensorType, &sensorID, &date, &valueFloat, &valueInt, &name, &desciption)
           dataProbeSlice = append(dataProbeSlice, moisterProbe{Date: date, Voltage: valueFloat, Value: valueInt})
       }
-      probeMaster[probeID] = MasterStruct{Calib: calib[probeID], Data: dataProbeSlice}
+      label = listMap[probeID]
+      probeMaster[label] = MasterStruct{Calib: calib[probeID], Data: dataProbeSlice}
       sensors[sensorType] = append(sensors[sensorType], probeMaster)
     }
     return sensors
