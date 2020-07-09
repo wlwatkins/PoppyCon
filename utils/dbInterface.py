@@ -36,7 +36,6 @@ def readHumidity():
 
     # Create the ADC object using the I2C bus
     adc1 = ADS.ADS1015(i2c, address=0x48)
-    adc2 = ADS.ADS1015(i2c, address=0x49)
 
     data = {}
 
@@ -71,6 +70,17 @@ def readHumidity():
                             "name": "prob13",
                             "desc": "prob13 description"
                         }
+
+    return data
+
+
+def readLight():
+    # Create the I2C bus
+    i2c = busio.I2C(board.SCL, board.SDA)
+    # Create the ADC object using the I2C bus
+    adc2 = ADS.ADS1015(i2c, address=0x49)
+
+    data = {}
 
     probe = AnalogIn(adc2, ADS.P0)
     data["prob20"] =    {
@@ -120,6 +130,7 @@ def readTemperature():
 def getMeasurements():
     data = {}
     data['moisture'] = readHumidity()
+    data['light'] = readLight()
     data['temperature'] = readTemperature()
 
     return data
@@ -138,6 +149,15 @@ if __name__ == "__main__":
                                     name=value['name'],
                                     desciption=value['desc'])
 
+        for key, value in data['light'].items():
+            record = Sensors.create(sensorType='LIGHT',
+                                    sensorID=key,
+                                    date=now,
+                                    valueFloat=value['voltage'],
+                                    valueInt=int(value['value']),
+                                    name=value['name'],
+                                    desciption=value['desc'])
+
         for key, value in data['temperature'].items():
             record = Sensors.create(sensorType='TEMPERATURE',
                                     sensorID=key,
@@ -147,4 +167,4 @@ if __name__ == "__main__":
                                     name=value['name'],
                                     desciption=value['desc'])
         db.close()
-        time.sleep(60)
+        time.sleep(30)
