@@ -14,7 +14,7 @@ import (
 
 func CheckErr(err error, errMsg string) {
   if err != nil {
-    log.Fatal(fmt.Sprintf(errMsg, err))
+    log.Print(fmt.Sprintf(errMsg, err))
   }
 }
 
@@ -61,6 +61,7 @@ func sensorList() ([]string, map[string]string) {
 
   lm := make(map[string]string)
   var sl []string
+  var cmt string
   for {
         l, err := r.Read()
         if err == io.EOF {
@@ -68,8 +69,12 @@ func sensorList() ([]string, map[string]string) {
         } else if err != nil {
           CheckErr(err, "Error whilst reading file: %s")
         }
-        lm[l[0]] = l[1]
-        sl = append(sl, l[0])
+        cmt = l[0][0:1]
+        if cmt != "#" {
+          lm[l[0]] = l[1]
+          sl = append(sl, l[0])
+        }
+
     }
     return sl, lm
 }
