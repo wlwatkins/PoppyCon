@@ -181,8 +181,21 @@ $(function () {
 					borderThickness: 0,
 					cornerRadius: 0,
 					fontStyle: "normal",
-					valueFormatString: "HH:MM\n D/MMM/YYYY",
 					shared: true,
+	        contentFormatter: function(e){
+	          var str = "";
+						var date = moment(e.entries[0].dataPoint.x).format('HH:mm:ss - DD/MM/YYYY');
+						var temp = `${date}<br>`
+	          for (var i = 0; i < e.entries.length; i++){
+
+							var serie = `<span style="color:${e.entries[i].dataSeries._colorSet[0]};">${e.entries[i].dataSeries.name}:</span> <strong>${e.entries[i].dataPoint.y.toFixed(2)} %</strong> <br/>`
+	            // var  temp = "<span style='"+e.entries[i].dataSeries.name + " <strong>"+  e.entries[i].dataPoint.y + "</strong> <br/>" ;
+	            str = str.concat(serie);
+							console.log(e);
+	          }
+						temp = temp.concat(str);
+	          return (temp);
+	        }
 				},
 				legend:{
 					cursor: "pointer",
@@ -271,8 +284,21 @@ $(function () {
 					borderThickness: 0,
 					cornerRadius: 0,
 					fontStyle: "normal",
-					valueFormatString: "HH:MM\n D/MMM/YYYY",
 					shared: true,
+	        contentFormatter: function(e){
+	          var str = "";
+						var date = moment(e.entries[0].dataPoint.x).format('HH:mm:ss - DD/MM/YYYY');
+						var temp = `${date}<br>`
+	          for (var i = 0; i < e.entries.length; i++){
+
+							var serie = `<span style="color:${e.entries[i].dataSeries._colorSet[0]};">${e.entries[i].dataSeries.name}:</span> <strong>${e.entries[i].dataPoint.y.toFixed(2)}°C</strong> <br/>`
+	            // var  temp = "<span style='"+e.entries[i].dataSeries.name + " <strong>"+  e.entries[i].dataPoint.y + "</strong> <br/>" ;
+	            str = str.concat(serie);
+							console.log(e);
+	          }
+						temp = temp.concat(str);
+	          return (temp);
+	        }
 				},
 				legend:{
 					cursor: "pointer",
@@ -355,8 +381,18 @@ $(function () {
 					borderThickness: 0,
 					cornerRadius: 0,
 					fontStyle: "normal",
-					valueFormatString: "HH:MM\n D/MMM/YYYY",
 					shared: true,
+	        contentFormatter: function(e){
+	          var str = "";
+						var date = moment(e.entries[0].dataPoint.x).format('HH:mm:ss - DD/MM/YYYY');
+						var temp = `${date}<br>`
+	          for (var i = 0; i < e.entries.length; i++){
+							var serie = `<span style="color:${e.entries[i].dataSeries._colorSet[0]};">${e.entries[i].dataSeries.name}:</span> <strong>${e.entries[i].dataPoint.y.toFixed(2)} %</strong> <br/>`
+	            str = str.concat(serie);
+	          }
+						temp = temp.concat(str);
+	          return (temp);
+	        }
 				},
 				legend:{
 					cursor: "pointer",

@@ -88,9 +88,13 @@ func settingsHandler(w http.ResponseWriter, r *http.Request) {
         fileName := r.FormValue("file")
         fileBody := r.FormValue("content")
         err := ioutil.WriteFile("utils/"+fileName, []byte(fileBody), 0600)
-        CheckErrSend(w, err, "Could not write config file %s")
-        msg := fmt.Sprintf("File %s was saved.", fileName)
-        renderTemplate(w, "success", &Page{Message: []byte(msg)})
+        if err != nil {
+          msg := fmt.Sprintf("<p><a href='/' > <- Dashboard</a> | Error whilst saving file %s :: %s </p>", fileName, err)
+          fmt.Fprintf(w, msg)
+        }else{
+          msg := fmt.Sprintf("File %s was saved.", fileName)
+          renderTemplate(w, "success", &Page{Message: []byte(msg)})
+        }
     default:
         fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
     }

@@ -187,6 +187,6 @@ if __name__ == "__main__":
                                         name=value['name'],
                                         desciption=value['desc'])
             db.close()
-            time.sleep(30)
+            time.sleep(120)
         except Excpetion as e:
             logging.error(f"Error in main loop: {e}")
