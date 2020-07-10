@@ -7,14 +7,14 @@
     <title>Poppy Con - Dashboard</title>
     <link rel="icon" type="image/png" href="static/img/poppyconLogo.png">
     <!-- stylesheets-->
-    <link href="static/fonts/font-roboto.css" rel="stylesheet">
-    <link href="static/bootstrap/bootstrap4-alpha3.min.css" rel="stylesheet">
-    <link href="static/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="static/poppycon/style.css" rel="stylesheet">
+    <link href="static/fonts/font-roboto.css" type="text/css" rel="stylesheet">
+    <link href="static/bootstrap/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="static/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet">
+    <link href="static/poppycon/style.css" type="text/css" rel="stylesheet">
     <!-- scripts-->
     <script src="static/jquery/jquery.min.js"></script>
     <script src="static/tether/tether.min.js"></script>
-    <script src="static/bootstrap/bootstrap4-alpha3.min.js"></script>
+    <script src="static/bootstrap/bootstrap.min.js"></script>
     <script src="static/canvasjs/canvasjs.min.js"></script>
     <script src="static/poppycon/main.js"></script>
     <script src="static/poppycon/customCharts.js"></script>
@@ -29,7 +29,6 @@
         </div>
       </div>
     </nav>
-    <!-- /header-->
     <!-- sidebar-->
     <div id="sidebar" class="sidebar-toggle">
       <ul class="nav nav-sidebar">
@@ -39,41 +38,67 @@
         <li role="separator" class="divider"></li>
         <li><a href="/systemlogs"><i aria-hidden="true" class="fa fa-terminal fa-lg fa-fw"></i><span>System logs</span></a></li>
         <li role="separator" class="divider"></li>
-        <li><a href="/reboot"><i aria-hidden="true" class="fa fa-refresh fa-lg fa-fw"></i><span>Reboot</span></a></li>
+        <li><a href="#" role="button" data-toggle="modal" data-target="#rebootModal"><i aria-hidden="true" class="fa fa-refresh fa-lg fa-fw"></i><span>Reboot</span></a></li>
         <li role="separator" class="divider"></li>
-        <li><a href="/shutdown"><i aria-hidden="true" class="fa fa-power-off fa-lg fa-fw"></i><span>Shutdown</span></a></li>
+        <li><a href="#" role="button" data-toggle="modal" data-target="#shutdownModal"><i aria-hidden="true" class="fa fa-power-off fa-lg fa-fw"></i><span>Shutdown</span></a></li>
         <li role="separator" class="divider"></li>
       </ul>
     </div>
     <!-- /sidebar-->
+    <!-- Modal-->
+    <div id="rebootModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade">
+      <div role="document" class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 id="exampleModalLabel" class="modal-title">Reboot</h5>
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+          </div>
+          <div class="modal-body">The page will break you'll have to mannually return to dashboard in a few minutes.</div>
+          <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button><a href="/reboot" type="button" class="btn btn-warning">I'm sure</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="shutdownModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade">
+      <div role="document" class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 id="exampleModalLabel" class="modal-title">Shutdown</h5>
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+          </div>
+          <div class="modal-body">This is terminal, you'll have to reboot the pi manually.</div>
+          <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button><a href="/shutdown" type="button" class="btn btn-danger">I'm sure</a>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- page-content-wrapper-->
     <div id="page-content-wrapper" class="page-content-toggle">
       <div class="container-fluid">
         <div class="row">
           <div class="col-xl-4">
             <div class="card card-block">
-              <h4 class="card-title m-b-2">Temperature sensors -<span class="custom-tag tag m-l-1">
-                  <div id="temperatureTag"> </div></span></h4>
+              <h4 class="card-title m-b-2">Temperature sensors -<span id="temperatureTag" class="custom-tag tag m-l-1"> </span></h4>
               <div id="temperatureLineChart" class="charts"></div>
             </div>
           </div>
           <div class="col-xl-4">
             <div class="card card-block">
-              <h4 class="card-title m-b-2">Humidity sensors -<span class="custom-tag tag m-l-1">
-                  <div id="humidityTag"></div></span></h4>
+              <h4 class="card-title m-b-2">Humidity sensors -<span id="humidityTag" class="custom-tag tag m-l-1"></span></h4>
               <div id="humidityLineChart" class="charts"></div>
             </div>
           </div>
           <div class="col-xl-4">
             <div class="card card-block">
-              <h4 class="card-title m-b-2">Light sensors -<span class="custom-tag tag m-l-1">
-                  <div id="lightTag"></div></span></h4>
+              <h4 class="card-title m-b-2">Light sensors -<span id="lightTag" class="custom-tag tag m-l-1"></span></h4>
               <div id="lightLineChart" class="charts"></div>
             </div>
           </div>
         </div>
         <!-- /3rd row-->
-
+        
       </div>
     </div>
   </body>

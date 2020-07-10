@@ -86,6 +86,20 @@ $(function () {
 		url: '',
 		type: 'POST',
 		dataType: 'json',
+		beforeSend: function() {
+				// setting a timeout
+				console.log($( ".charts" ))
+
+				$( ".charts" ).append( `<div class="spinner-border" role="status">
+				  <span class="sr-only">Loading...</span>
+				</div>` );
+
+				setTimeout(function(){
+				  $('#someid').addClass("done");
+				}, 200000);
+
+
+		},
 		success : function(rawData) {
 			console.log(rawData)
 			param = rawData['Param'].split("\r\n");
@@ -132,7 +146,7 @@ $(function () {
 			}}
 			valueAvg = valueLast/i;
 
-			$( "#humidityTag" ).replaceWith(" Average: " +valueAvg.toFixed(2)+"%" );
+			$( "#humidityTag" ).append("Average: " +valueAvg.toFixed(2)+"%" );
 
 			// CanvasJS spline area chart to show revenue from Jan 2015 - Dec 2015
 			var humidityLineChart = new CanvasJS.Chart("humidityLineChart", {
@@ -222,7 +236,7 @@ $(function () {
 
 			valueAvg = valueLast/i;
 
-			$( "#temperatureTag" ).replaceWith(" Average: " +valueAvg.toFixed(1)+"°C" );
+			$( "#temperatureTag" ).append("Average: " +valueAvg.toFixed(1)+"°C" );
 
 			// CanvasJS spline area chart to show revenue from Jan 2015 - Dec 2015
 			var temperatureLineChart = new CanvasJS.Chart("temperatureLineChart", {
@@ -306,7 +320,7 @@ $(function () {
 			}}
 			valueAvg = valueLast/i;
 
-			$( "#lightTag" ).replaceWith(" Average: " +valueAvg.toFixed(1)+"%" );
+			$( "#lightTag" ).append("Average: " +valueAvg.toFixed(1)+"%" );
 
 			// CanvasJS spline area chart to show revenue from Jan 2015 - Dec 2015
 			var lightLineChart = new CanvasJS.Chart("lightLineChart", {

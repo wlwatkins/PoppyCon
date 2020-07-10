@@ -8,14 +8,14 @@ html(lang='en')
     title Poppy Con - Dashboard
     link(rel='icon', type='image/png', href='static/img/poppyconLogo.png')
     // stylesheets
-    link(href='static/fonts/font-roboto.css', rel='stylesheet')
-    link(href='static/bootstrap/bootstrap4-alpha3.min.css', rel='stylesheet')
-    link(href='static/font-awesome/css/font-awesome.min.css', rel='stylesheet')
-    link(href='static/poppycon/style.css', rel='stylesheet')
+    link(href='static/fonts/font-roboto.css', type="text/css", rel='stylesheet')
+    link(href='static/bootstrap/bootstrap.min.css', type="text/css", rel='stylesheet')
+    link(href='static/font-awesome/css/font-awesome.min.css', type="text/css", rel='stylesheet')
+    link(href='static/poppycon/style.css', type="text/css", rel='stylesheet')
     // scripts
     script(src='static/jquery/jquery.min.js')
     script(src='static/tether/tether.min.js')
-    script(src='static/bootstrap/bootstrap4-alpha3.min.js')
+    script(src='static/bootstrap/bootstrap.min.js')
     script(src='static/canvasjs/canvasjs.min.js')
     script(src='static/poppycon/main.js')
     script(src='static/poppycon/customCharts.js')
@@ -31,7 +31,8 @@ html(lang='en')
             a(href='/')
               span.hidden-xs-down.m-r-3 Poppy Con
               span.lead Dashboard
-    // /header
+    
+  
     // sidebar
     #sidebar.sidebar-toggle
       ul.nav.nav-sidebar
@@ -51,16 +52,44 @@ html(lang='en')
             span System logs
         li.divider(role='separator')
         li
-          a(href='/reboot')
+          a(href="#", role="button", data-toggle="modal", data-target="#rebootModal")
             i.fa.fa-refresh.fa-lg.fa-fw(aria-hidden='true')
             span Reboot
         li.divider(role='separator')
         li
-          a(href='/shutdown')
+          a(href="#", role="button", data-toggle="modal", data-target="#shutdownModal")
             i.fa.fa-power-off.fa-lg.fa-fw(aria-hidden='true')
             span Shutdown
         li.divider(role='separator')
     // /sidebar
+    
+    // Modal
+    #rebootModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+      .modal-dialog(role='document')
+        .modal-content
+          .modal-header
+            h5#exampleModalLabel.modal-title Reboot
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            | The page will break you'll have to mannually return to dashboard in a few minutes.
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+            a(href='/reboot').btn.btn-warning(type='button') I'm sure
+    
+    #shutdownModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+      .modal-dialog(role='document')
+        .modal-content
+          .modal-header
+            h5#exampleModalLabel.modal-title Shutdown
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            | This is terminal, you'll have to reboot the pi manually.
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+            a(href='/shutdown').btn.btn-danger(type='button') I'm sure
+    
     // page-content-wrapper
     #page-content-wrapper.page-content-toggle
       .container-fluid
@@ -69,8 +98,7 @@ html(lang='en')
             .card.card-block
               h4.card-title.m-b-2
                 | Temperature sensors -
-                span.custom-tag.tag.m-l-1
-                  #temperatureTag 
+                span.custom-tag.tag.m-l-1#temperatureTag 
               #temperatureLineChart.charts
       
         
@@ -78,16 +106,14 @@ html(lang='en')
             .card.card-block
               h4.card-title.m-b-2
                 | Humidity sensors -
-                span.custom-tag.tag.m-l-1
-                  #humidityTag
+                span.custom-tag.tag.m-l-1#humidityTag
               #humidityLineChart.charts
               
           .col-xl-4
             .card.card-block
               h4.card-title.m-b-2
                 | Light sensors -
-                span.custom-tag.tag.m-l-1
-                  #lightTag
+                span.custom-tag.tag.m-l-1#lightTag
               #lightLineChart.charts
         
         // /3rd row

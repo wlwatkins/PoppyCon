@@ -1,1 +1,9 @@
-EMPTY
+2020-07-10 13:36:32,124 - dbInterface - [INFO] :: Python dbInterface script is starting...
+2020-07-10 13:36:32,158 - dbInterface - [INFO] :: Initial connection to database OK!
+2020-07-10 13:36:32,161 - dbInterface - [INFO] :: Starting main loop... measuring
+2020-07-10 13:30:07,893 - dbInterface - [INFO] :: Python dbInterface script is starting...
+2020-07-10 13:30:07,972 - dbInterface - [INFO] :: Initial connection to database OK!
+2020-07-10 13:30:07,975 - dbInterface - [INFO] :: Starting main loop... measuring
+2020-07-10 13:39:31,127 - dbInterface - [INFO] :: Python dbInterface script is starting...
+2020-07-10 13:39:31,191 - dbInterface - [INFO] :: Initial connection to database OK!
+2020-07-10 13:39:31,194 - dbInterface - [INFO] :: Starting main loop... measuring

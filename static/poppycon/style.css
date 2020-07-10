@@ -2,7 +2,6 @@ body {
   background-color: #ffffff;
   font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
-  padding-top: 64px;
 }
 
 #header {
@@ -10,7 +9,6 @@ body {
   height: 64px;
   margin-bottom: 0;
   padding: 0;
-  position: fixed;
 }
 
 #header .container-fluid {
@@ -33,6 +31,10 @@ body {
 #header .brand {
   display: inline-block;
   padding: 12px 16px 12px 0;
+}
+
+.brand > a > .lead {
+  padding-left: 12px;
 }
 
 #header .brand a {
@@ -62,6 +64,7 @@ body {
 
 #sidebar > ul > li {
   margin: 0;
+  width:100%;
 }
 
 #sidebar > ul > li > a {
@@ -91,7 +94,13 @@ body {
 }
 
 #page-content-wrapper > .container-fluid {
-  padding-top: 0.75rem;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.row > * {
+  padding-bottom: 20px;
 }
 
 /*------ sidebar toggle ------*/
@@ -160,6 +169,9 @@ body {
 
 .custom-tag {
 	font-size: 100%;
+  margin: 0px 5px 0px 5px;
+  padding: 0px 5px 0px 5px;
+
 }
 
 #visitors-chart-back-button {

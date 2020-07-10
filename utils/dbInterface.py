@@ -7,7 +7,22 @@ from random import random
 import time
 import board
 import busio
+import logging
+import os
 
+class AppFilter(logging.Filter):
+    def filter(self, record):
+        record.app_name = 'dbInterface'
+        return True
+
+cwd = os.getcwd()
+logFile = os.path.join(cwd, "utils/logs")
+extra = {'app_name':'Super App'}
+logging.basicConfig(filename=logFile, filemode='a', level=logging.INFO, format='%(asctime)s - %(app_name)s - [%(levelname)s] :: %(message)s')
+logging.getLogger("").addFilter(AppFilter())
+
+
+logging.info("Python dbInterface script is starting...")
 db = SqliteDatabase('data.db', pragmas={
     'journal_mode': 'wal',
     'cache_size': -1 * 64000,  # 64MB
@@ -26,9 +41,12 @@ class Sensors(Model):
 
     class Meta:
         database = db
-
-db.connect()
-db.create_tables([Sensors])
+try:
+    db.connect()
+    db.create_tables([Sensors])
+    logging.info("Initial connection to database OK!")
+except Excpetion as e:
+    logging.critical(f"Could not initialise database {e}")
 
 def readHumidity():
     # Create the I2C bus
@@ -136,35 +154,39 @@ def getMeasurements():
     return data
 db.close()
 if __name__ == "__main__":
+    logging.info("Starting main loop... measuring")
     while True:
-        db.connect()
-        data = getMeasurements()
-        now = int(time.time())
-        for key, value in data['moisture'].items():
-            record = Sensors.create(sensorType='MOISTURE',
-                                    sensorID=key,
-                                    date=now,
-                                    valueFloat=value['voltage'],
-                                    valueInt=int(value['value']),
-                                    name=value['name'],
-                                    desciption=value['desc'])
+        try:
+            db.connect()
+            data = getMeasurements()
+            now = int(time.time())
+            for key, value in data['moisture'].items():
+                record = Sensors.create(sensorType='MOISTURE',
+                                        sensorID=key,
+                                        date=now,
+                                        valueFloat=value['voltage'],
+                                        valueInt=int(value['value']),
+                                        name=value['name'],
+                                        desciption=value['desc'])
 
-        for key, value in data['light'].items():
-            record = Sensors.create(sensorType='LIGHT',
-                                    sensorID=key,
-                                    date=now,
-                                    valueFloat=value['voltage'],
-                                    valueInt=int(value['value']),
-                                    name=value['name'],
-                                    desciption=value['desc'])
+            for key, value in data['light'].items():
+                record = Sensors.create(sensorType='LIGHT',
+                                        sensorID=key,
+                                        date=now,
+                                        valueFloat=value['voltage'],
+                                        valueInt=int(value['value']),
+                                        name=value['name'],
+                                        desciption=value['desc'])
 
-        for key, value in data['temperature'].items():
-            record = Sensors.create(sensorType='TEMPERATURE',
-                                    sensorID=key,
-                                    date=now,
-                                    valueFloat=value['value'],
-                                    valueInt=-1,
-                                    name=value['name'],
-                                    desciption=value['desc'])
-        db.close()
-        time.sleep(30)
+            for key, value in data['temperature'].items():
+                record = Sensors.create(sensorType='TEMPERATURE',
+                                        sensorID=key,
+                                        date=now,
+                                        valueFloat=value['value'],
+                                        valueInt=-1,
+                                        name=value['name'],
+                                        desciption=value['desc'])
+            db.close()
+            time.sleep(30)
+        except Excpetion as e:
+            logging.error(f"Error in main loop: {e}")
