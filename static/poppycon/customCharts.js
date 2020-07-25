@@ -88,20 +88,20 @@ $(function () {
 		dataType: 'json',
 		beforeSend: function() {
 				// setting a timeout
-				console.log($( ".charts" ))
-
 				$( ".charts" ).append( `<div class="spinner-border" role="status">
 				  <span class="sr-only">Loading...</span>
 				</div>` );
 
-				setTimeout(function(){
-				  $('#someid').addClass("done");
-				}, 200000);
+				// setTimeout(function(){
+				//   $('#someid').addClass("done");
+				// }, 200000);
 
 
 		},
 		success : function(rawData) {
-			console.log(rawData)
+			console.log("###########################");
+			console.log(rawData);
+			console.log("###########################");
 			param = rawData['Param'].split("\r\n");
 			var param2 = {};
 			param2 = $.map(param, function(item) {
@@ -112,7 +112,6 @@ $(function () {
 			}
 			});
 			param = param2[0]
-			console.log(param)
 
 			data = rawData['Data']
 			var dat = data["MOISTURE"]
@@ -147,6 +146,7 @@ $(function () {
 			valueAvg = valueLast/i;
 
 			$( "#humidityTag" ).append("Average: " +valueAvg.toFixed(2)+"%" );
+
 
 			// CanvasJS spline area chart to show revenue from Jan 2015 - Dec 2015
 			var humidityLineChart = new CanvasJS.Chart("humidityLineChart", {
@@ -191,7 +191,7 @@ $(function () {
 							var serie = `<span style="color:${e.entries[i].dataSeries._colorSet[0]};">${e.entries[i].dataSeries.name}:</span> <strong>${e.entries[i].dataPoint.y.toFixed(2)} %</strong> <br/>`
 	            // var  temp = "<span style='"+e.entries[i].dataSeries.name + " <strong>"+  e.entries[i].dataPoint.y + "</strong> <br/>" ;
 	            str = str.concat(serie);
-							console.log(e);
+
 	          }
 						temp = temp.concat(str);
 	          return (temp);
@@ -230,7 +230,7 @@ $(function () {
 
 					var date = new Date(0);
 					date.setUTCSeconds(v['Date']);
-					var value = v['Voltage']
+					var value = v['Value']
 					return [{x: date, y: value}]
 				});
 				i = i+1
@@ -294,7 +294,6 @@ $(function () {
 							var serie = `<span style="color:${e.entries[i].dataSeries._colorSet[0]};">${e.entries[i].dataSeries.name}:</span> <strong>${e.entries[i].dataPoint.y.toFixed(2)}°C</strong> <br/>`
 	            // var  temp = "<span style='"+e.entries[i].dataSeries.name + " <strong>"+  e.entries[i].dataPoint.y + "</strong> <br/>" ;
 	            str = str.concat(serie);
-							console.log(e);
 	          }
 						temp = temp.concat(str);
 	          return (temp);
@@ -449,6 +448,55 @@ $(function () {
 		error: function(e){
 			console.log(e);
 		}
+	});
+
+
+
+	$( ".pump" ).click(function(e) {
+		console.log(e)
+		var button = $(e.currentTarget)
+		var org = e.target.firstChild
+
+		console.log(org.data.split(" ")[2])
+		$.ajax({
+			url: '/pump',
+			type: 'POST',
+			dataType: 'json',
+			data: {"button": org.data.split(" ")[2]},
+			beforeSend: function() {
+					// setting a timeout
+					$(".blockPump").prop("disabled",true);
+
+					button.html( `<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span><span class="CountDown"> Loading...</span>` );
+
+			},
+			success : function(rawData) {
+					counter = 10
+
+				var waterPlants = setInterval(function() {
+					    counter--;
+					    // Display 'counter' wherever you want to display it.
+							button.html( `<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span><span class="CountDown"> ${counter}</span>` );
+
+					    if (counter == 0) {
+					        // Display a login box
+									button.html( org );
+									$(".blockPump").prop("disabled",false);
+
+					        clearInterval(waterPlants);
+					    }
+					}, 1000);
+
+
+
+			},
+			error: function(e){
+				console.log("error", e);
+				button.html( `Error` );
+
+			}
+		});
+
 	});
 
 

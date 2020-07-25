@@ -20,11 +20,8 @@ func CheckErr(err error, errMsg string) {
 
 
 func queryDB(p string) *sql.Rows {
-  db, err := sql.Open("sqlite3", "./data.db")
-  CheckErr(err, "Could not open database: %s")
   r, err := db.Query(fmt.Sprintf("SELECT * FROM sensors WHERE sensorID = '%s' ORDER BY date ASC", p))
   CheckErr(err, "Error whilst doing query: %s")
-  db.Close()
   return r
 }
 
@@ -84,8 +81,7 @@ func sensorList() ([]string, map[string]string) {
 
 type moisterProbe struct {
   Date int64
-  Voltage float64
-  Value int
+  Value float64
 }
 
 type MasterStruct struct {
@@ -94,19 +90,14 @@ type MasterStruct struct {
   Label string
 }
 
-func readMoister() map[string][]map[string]MasterStruct {
+func readSensorDB() map[string][]map[string]MasterStruct {
     calib := getCalib()
     probesList, listMap := sensorList()
-    // fmt.Println(listMap)
-    // database row decleration
     var id int
     var sensorType string
     var sensorID string
     var date int64
-    var valueInt int
     var valueFloat float64
-    var name string
-    var desciption string
 
     var label string
     var dataProbeSlice []moisterProbe
@@ -114,15 +105,43 @@ func readMoister() map[string][]map[string]MasterStruct {
 
     for _, probeID := range probesList {
       probeMaster := make(map[string]MasterStruct)
-      rows := queryDB(probeID)
+      rows, err := db.Query(fmt.Sprintf("SELECT * FROM sensors WHERE sensorID = '%s' ORDER BY date ASC", probeID))
+      CheckErr(err, "Error whilst doing query: %s")
       dataProbeSlice = make([]moisterProbe, 0)
       for rows.Next() {
-          rows.Scan(&id, &sensorType, &sensorID, &date, &valueFloat, &valueInt, &name, &desciption)
-          dataProbeSlice = append(dataProbeSlice, moisterProbe{Date: date, Voltage: valueFloat, Value: valueInt})
+          rows.Scan(&id, &sensorType, &sensorID, &date, &valueFloat)
+          dataProbeSlice = append(dataProbeSlice, moisterProbe{Date: date, Value: valueFloat})
       }
       label = listMap[probeID]
       probeMaster[label] = MasterStruct{Calib: calib[probeID], Data: dataProbeSlice}
       sensors[sensorType] = append(sensors[sensorType], probeMaster)
     }
+
     return sensors
   }
+
+
+  func readWaterDB() (int64, int64) {
+      var id int
+      var date int64
+      var which int64
+      var top int64
+      var bottom int64
+
+
+      rowsTop, err := db.Query("SELECT * FROM watering WHERE which = 1 ORDER BY date ASC")
+      CheckErr(err, "Error whilst doing query: %s")
+      for rowsTop.Next() {
+          rowsTop.Scan(&id, &date, &which)
+          top = date
+      }
+
+      rowsBottom, err := db.Query("SELECT * FROM watering WHERE which = 2 ORDER BY date ASC")
+      CheckErr(err, "Error whilst doing query: %s")
+      for rowsBottom.Next() {
+          rowsBottom.Scan(&id, &date, &which)
+          bottom = date
+      }
+
+      return top, bottom
+    }

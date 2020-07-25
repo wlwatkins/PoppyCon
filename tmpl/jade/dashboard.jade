@@ -43,6 +43,11 @@ html(lang='en')
             span Dashboard
         li.divider(role='separator')
         li
+          a(href="#", role="button", data-toggle="modal", data-target="#waterModal")
+            i.fa.fa-tint.fa-lg.fa-fw(aria-hidden='true')
+            span Water plants
+        li.divider(role='separator')
+        li
           a(href='/settings')
             i.fa.fa-cogs.fa-lg.fa-fw(aria-hidden='true')
             span Settings
@@ -65,11 +70,37 @@ html(lang='en')
     // /sidebar
     
     // Modal
-    #rebootModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+    #waterModal.modal.fade(tabindex='-1', role='dialog', aria-hidden='true')
       .modal-dialog(role='document')
         .modal-content
           .modal-header
-            h5#exampleModalLabel.modal-title Reboot
+            h5.modal-title Activate pumps
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            | Pressing a button will activate the given pump for 10 seconds.
+            ul
+              li {{printf "%s" .LastWaterTop}}
+              li {{printf "%s" .LastWaterBottom}}
+          .modal-footer
+            button.blockPump.btn.btn-secondary(type='button', data-dismiss='modal') Close
+            
+            button.blockPump.pump.btn.btn-warning(type='button') 
+              //- span.spinner-grow.spinner-grow-sm(role='status', aria-hidden='true')
+              //- span.CountDown   Loading...
+              | Water top
+              
+            button.blockPump.pump.btn.btn-info(type='button') 
+              //- span.spinner-grow.spinner-grow-sm(role='status', aria-hidden='true')
+              //- span.CountDown   Loading...
+              | Water bottom
+            
+    // Modal
+    #rebootModal.modal.fade(tabindex='-1', role='dialog', aria-hidden='true')
+      .modal-dialog(role='document')
+        .modal-content
+          .modal-header
+            h5.modal-title Reboot
             button.close(type='button', data-dismiss='modal', aria-label='Close')
               span(aria-hidden='true') ×
           .modal-body
@@ -78,11 +109,11 @@ html(lang='en')
             button.btn.btn-secondary(type='button', data-dismiss='modal') Close
             a(href='/reboot').btn.btn-warning(type='button') I'm sure
     
-    #shutdownModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+    #shutdownModal.modal.fade(tabindex='-1', role='dialog', aria-hidden='true')
       .modal-dialog(role='document')
         .modal-content
           .modal-header
-            h5#exampleModalLabel.modal-title Shutdown
+            h5.modal-title Shutdown
             button.close(type='button', data-dismiss='modal', aria-label='Close')
               span(aria-hidden='true') ×
           .modal-body

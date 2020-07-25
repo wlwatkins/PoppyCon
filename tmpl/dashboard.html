@@ -43,15 +43,42 @@
         <li role="separator" class="divider"></li>
         <li><a href="#" role="button" data-toggle="modal" data-target="#shutdownModal"><i aria-hidden="true" class="fa fa-power-off fa-lg fa-fw"></i><span>Shutdown</span></a></li>
         <li role="separator" class="divider"></li>
+        <li role="separator" class="divider"></li>
+        <li><a href="#" role="button" data-toggle="modal" data-target="#waterModal"><i aria-hidden="true" class="fa fa-tint fa-lg fa-fw"></i><span>Water plants</span></a></li>
+        <li role="separator" class="divider"></li>
       </ul>
     </div>
     <!-- /sidebar-->
     <!-- Modal-->
-    <div id="rebootModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade">
+    <div id="waterModal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
       <div role="document" class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 id="exampleModalLabel" class="modal-title">Reboot</h5>
+            <h5 class="modal-title">Activate pumps</h5>
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+          </div>
+          <div class="modal-body">Pressing a button will activate the given pump for 10 seconds.
+            <ul>
+              <li>{{printf "%s" .LastWaterTop}}</li>
+              <li>{{printf "%s" .LastWaterBottom}}</li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="blockPump btn btn-secondary">Close</button>
+            <button type="button" class="blockPump pump btn btn-warning"> Water top
+            </button>
+            <button type="button" class="blockPump pump btn btn-info"> Water bottom
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal-->
+    <div id="rebootModal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+      <div role="document" class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Reboot</h5>
             <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
           </div>
           <div class="modal-body">The page will break you'll have to mannually return to dashboard in a few minutes.</div>
@@ -61,11 +88,11 @@
         </div>
       </div>
     </div>
-    <div id="shutdownModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade">
+    <div id="shutdownModal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
       <div role="document" class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 id="exampleModalLabel" class="modal-title">Shutdown</h5>
+            <h5 class="modal-title">Shutdown</h5>
             <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
           </div>
           <div class="modal-body">This is terminal, you'll have to reboot the pi manually.</div>
@@ -99,7 +126,7 @@
           </div>
         </div>
         <!-- /3rd row-->
-        
+
       </div>
     </div>
   </body>
