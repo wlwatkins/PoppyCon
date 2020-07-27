@@ -55,9 +55,9 @@ func PumpControl() *gobot.Robot {
 
           relays.Driver1.On()
           relays.Driver2.On()
-
-          relays.Driver1.Off()
-          relays.Driver2.Off()
+          // 
+          // relays.Driver1.Off()
+          // relays.Driver2.Off()
           go waterPump(relays)
 
           // gobot.Every(1*time.Second, func() {
