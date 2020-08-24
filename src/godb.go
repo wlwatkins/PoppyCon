@@ -269,6 +269,7 @@ func readSensorDB() map[string][]map[string]MasterStruct {
     sensors[sensorType] = append(sensors[sensorType], probeMaster) // Append probeMaster to sensor slice
   }
 
+
   return sensors
 }
 

@@ -291,6 +291,29 @@ func SensorAcquisition(db *sql.DB) *gobot.Robot {
 
           go readOneWire(tempsChan)
           updateDayNight()
+          //Get temperatures
+          data = getTemps(tempsChan)
+          for _, d := range data{
+            insertSensorDB(d)
+          }
+
+          //Get humidity
+          data = getI2CSensor(hum, 1)
+          for _, d := range data{
+            insertSensorDB(d)
+          }
+
+          //Get light
+          data = getI2CSensor(light, 2)
+          for _, d := range data{
+            insertSensorDB(d)
+          }
+
+          //Get DHT
+          data, err = readDHT22(dht)
+          for _, d := range data{
+            insertSensorDB(d)
+          }
           gobot.Every(900*time.Second, func() {
 
                   //Get temperatures
