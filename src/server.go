@@ -9,7 +9,8 @@ import (
   "encoding/json"
   "regexp"
   "time"
-  "syscall"
+  "strings"
+  // "syscall"
   "gobot.io/x/gobot"
 )
 
@@ -20,13 +21,14 @@ type Page struct {
     Message []byte
     LastWaterTop []byte
     LastWaterBottom []byte
+    Sensor []string
 }
 
 var templates = template.Must(template.ParseFiles("tmpl/dashboard.html",
                                                   "tmpl/settings.html",
-                                                  "tmpl/success.html",
+                                                  "tmpl/calibration.html",
                                                   "tmpl/systemlogs.html",))
-var validPath = regexp.MustCompile("^/($|dashboard|settings|pump|systemlogs|reboot|shutdown)?$")
+var validPath = regexp.MustCompile("^/($|dashboard|settings|pump|calibration|systemlogs|reboot|shutdown)?$")
 
 func CheckErrSend(w http.ResponseWriter,err error, errMsg string) {
   if err != nil {
@@ -53,21 +55,28 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
 
 type dataAjax struct {
   Data map[string][]map[string]MasterStruct
+  Water []dataWater
+  DayNight []dbDayTimeRow
   Param string
+}
+
+type calibAjax struct {
+  Data float64
 }
 
 func dashboardHandler(w http.ResponseWriter, r *http.Request) {
   switch r.Method {
     case "GET":
-      top, bottom := readWaterDB()
-      lastWaterTop := fmt.Sprintf("Last watering of top was : %s", time.Unix(top, 0).Format(time.RFC822Z))
-      lastWaterBottom := fmt.Sprintf("Last watering of bottom was : %s", time.Unix(bottom, 0).Format(time.RFC822Z))
-      p := &Page{LastWaterTop: []byte(lastWaterTop), LastWaterBottom: []byte(lastWaterBottom)}
+      // top, bottom := readWaterDB()
+      // lastWaterTop := fmt.Sprintf("Last watering of top was : %s", time.Unix(top, 0).Format(time.RFC822Z))
+      // lastWaterBottom := fmt.Sprintf("Last watering of bottom was : %s", time.Unix(bottom, 0).Format(time.RFC822Z))
+      // p := &Page{LastWaterTop: []byte(lastWaterTop), LastWaterBottom: []byte(lastWaterBottom)}
+      p := &Page{}
       renderTemplate(w, "dashboard", p)
     case "POST":
       paramFile, err := loadFile("parameters.config")
       CheckErrSend(w, err, "Could not open parameters: %s")
-      jsonData := dataAjax{Data: readSensorDB(), Param: fmt.Sprintf("%s", paramFile) }
+      jsonData := dataAjax{Data: readSensorDB(), Water: readWaterDB(), DayNight: readDayNightDB(), Param: fmt.Sprintf("%s", paramFile) }
       json.NewEncoder(w).Encode(jsonData)
     default:
       fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
@@ -128,13 +137,45 @@ func settingsHandler(w http.ResponseWriter, r *http.Request) {
           msg := fmt.Sprintf("<p><a href='/' > <- Dashboard</a> | Error whilst saving file %s :: %s </p>", fileName, err)
           fmt.Fprintf(w, msg)
         }else{
-          msg := fmt.Sprintf("File %s was saved.", fileName)
-          renderTemplate(w, "success", &Page{Message: []byte(msg)})
+          msg := fmt.Sprintf("<p>File %s was saved - go back home <a href='/' > <- Dashboard</a></p>", fileName)
+          // renderTemplate(w, "success", &Page{Message: []byte(msg)})
+          fmt.Fprintf(w, msg)
+
         }
     default:
         fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
     }
 
+}
+
+func calibrationHandler(w http.ResponseWriter, r *http.Request) {
+  var sen []string
+  switch r.Method {
+    case "GET":
+      calibFile, err := loadFile("calibration.config")
+      CheckErrSend(w, err, "Could not open calibration: %s")
+      sm, _ := sensorList()
+      for _, s := range sm{
+        if strings.Contains(s, "prob") {
+          sen = append(sen, s)
+        }
+      }
+      p := &Page{Sensor: sen, CalibrationFile: calibFile}
+      renderTemplate(w, "calibration", p)
+    case "POST":
+        // Call ParseForm() to parse the raw query and update r.PostForm and r.Form.
+        if err := r.ParseForm(); err != nil {
+            fmt.Fprintf(w, "ParseForm() err: %v", err)
+            return
+        }
+        sensor := r.FormValue("sensor")
+        v := calibSensor(sensor)
+        jsonData := calibAjax{Data: v}
+        json.NewEncoder(w).Encode(jsonData)
+
+    default:
+        fmt.Fprintf(w, "Sorry, only GET methods are supported.")
+  }
 }
 
 func systemLogsHandler(w http.ResponseWriter, r *http.Request) {
@@ -153,15 +194,15 @@ func rebootHandler(w http.ResponseWriter, r *http.Request) {
   switch r.Method {
     case "GET":
       fmt.Fprintf(w, "<p>Rebooting PoppyCon - Wait a few minutes and go back home <a href='/' > <- Dashboard</a></p>")
-      gobot.After(5*time.Second, func() {
-          // fmt.Println(n)
-          err := syscall.Reboot(syscall.LINUX_REBOOT_CMD_RESTART)
-          if err != nil{
-            log.Println(err)
-            fmt.Fprintf(w, "<p>Error, could not reboot <a href='/' > <- Dashboard</a></p>")
-          }
-
-      })
+      // gobot.After(5*time.Second, func() {
+      //     // fmt.Println(n)
+      //     err := syscall.Reboot(syscall.LINUX_REBOOT_CMD_RESTART)
+      //     if err != nil{
+      //       log.Println(err)
+      //       fmt.Fprintf(w, "<p>Error, could not reboot <a href='/' > <- Dashboard</a></p>")
+      //     }
+      //
+      // })
 
 
     default:
@@ -173,13 +214,13 @@ func shutdownHandler(w http.ResponseWriter, r *http.Request) {
   switch r.Method {
     case "GET":
       fmt.Fprintf(w, "<p>Shutting down PoppyCon! You'll need to boot it up manually...</p>")
-      gobot.After(5*time.Second, func() {
-        err := syscall.Reboot(syscall.LINUX_REBOOT_CMD_POWER_OFF)
-        if err != nil{
-          log.Println(err)
-          fmt.Fprintf(w, "<p>Error, could not shutdown <a href='/' > <- Dashboard</a></p>")
-        }
-      })
+      // gobot.After(5*time.Second, func() {
+      //   err := syscall.Reboot(syscall.LINUX_REBOOT_CMD_POWER_OFF)
+      //   if err != nil{
+      //     log.Println(err)
+      //     fmt.Fprintf(w, "<p>Error, could not shutdown <a href='/' > <- Dashboard</a></p>")
+      //   }
+      // })
 
 
     default:
@@ -208,6 +249,7 @@ func webServer() *gobot.Robot  {
       http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
       http.HandleFunc("/", makeHandler(dashboardHandler))
       http.HandleFunc("/settings", makeHandler(settingsHandler))
+      http.HandleFunc("/calibration", makeHandler(calibrationHandler))
       http.HandleFunc("/systemlogs", makeHandler(systemLogsHandler))
       http.HandleFunc("/reboot", makeHandler(rebootHandler))
       http.HandleFunc("/shutdown", makeHandler(shutdownHandler))
@@ -216,7 +258,7 @@ func webServer() *gobot.Robot  {
 
       // http.HandleFunc("/settings/save", makeHandler(settingsSaveHandler))
 
-      log.Fatal(http.ListenAndServe(":80", nil))
+      log.Fatal(http.ListenAndServe(":81", nil))
        // }
   }
 

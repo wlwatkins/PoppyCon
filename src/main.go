@@ -2,6 +2,7 @@ package main
 
 import (
   "gobot.io/x/gobot"
+  "gobot.io/x/gobot/drivers/i2c"
   "os"
   "database/sql"
   _ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
@@ -15,6 +16,8 @@ var (
   tempsChanOut chan map[string]float64
   relay1State bool
   relay2State bool
+  hum *i2c.ADS1x15Driver
+  light *i2c.ADS1x15Driver
 )
 
 
