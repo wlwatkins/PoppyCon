@@ -1,128 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <title>Settings</title>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Poppy Con - Dashboard</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="icon" type="image/png" href="static/img/poppyconLogo.png">
-    <!-- stylesheets-->
-    <link href="static/fonts/font-roboto.css" type="text/css" rel="stylesheet">
-    <link href="static/bootstrap/bootstrap.min.css" type="text/css" rel="stylesheet">
-    <link href="static/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet">
-    <link href="static/poppycon/style.css" type="text/css" rel="stylesheet">
-    <!-- scripts-->
-    <script src="static/jquery/jquery.min.js"></script>
-    <script src="static/moment/moment.js"></script>
-    <script src="static/tether/tether.min.js"></script>
-    <script src="static/bootstrap/bootstrap.min.js"></script>
-    <script src="static/canvasjs/canvasjs.min.js"></script>
-    <script src="static/poppycon/main.js"></script>
-    <script src="static/poppycon/customCharts.js"></script>
+    <link rel="stylesheet" href="static/vendor/normalize/normalize.css">
+    <!-- VENDOR CSS-->
+    <link rel="stylesheet" href="static/vendor/materialize/css/materialize.min.css">
+    <link rel="stylesheet" href="static/vendor/highcharts/highcharts.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/main.css">
+    <!-- MAIN CSS-->
+    
+    <script rel="text/javascript" src="static/vendor/jquery/jquery.min.js"></script>
+    <script rel="text/javascript" src="static/vendor/materialize/js/materialize.min.js"></script>
+    <script rel="text/javascript" src="static/vendor/moment/moment.js"></script>
+    <script rel="text/javascript" src="static/vendor/moment/moment-timezone.js"></script>
+    <script rel="text/javascript" src="static/vendor/moment/moment-timezone-with-data.js"></script>
+    <script rel="text/javascript" src="static/vendor/highcharts/highcharts.js"></script>
+    <script rel="text/javascript" src="static/vendor/highcharts/modules/timeline.js"></script>
+    <script rel="text/javascript" src="static/vendor/highcharts/modules/series-label.js"></script>
+    <script rel="text/javascript" src="static/vendor/highcharts/modules/exporting.js"></script>
+    <script rel="text/javascript" src="static/vendor/highcharts/modules/export-data.js"></script>
+    
+    
+    
+    
+    
   </head>
   <body>
-    <!-- header-->
-    <nav id="header" class="navbar navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <div id="sidebar-toggle-button"><i aria-hidden="true" class="fa fa-bars"></i></div>
-          <div class="brand"><a href="/"><span class="hidden-xs-down m-r-3">Poppy Con</span><span class="lead">Dashboard</span></a></div>
-        </div>
+    <nav>
+      <div class="nav-wrapper">
+        <div class="center"><a href="#" data-target="dropdown1" class="waves-effect waves-light dropdown-trigger btn mainBtn">PoppyCon</a></div>
+        <!-- Dropdown Structure-->
+        <ul id="dropdown1" class="dropdown-content">
+          <li><a href="/"> <i class="material-icons">dashboard</i>Dashboard</a></li>
+          <li><a href="/settings"><i class="material-icons">settings</i>Settings</a></li>
+          <li><a href="/calibration"><i class="material-icons">build</i>Calibration</a></li>
+          <li><a href="#waterModal" class="modal-trigger"><i class="material-icons">opacity</i>Water</a></li>
+          <li><a href="/systemlogs"> <i class="material-icons">last_page</i>System logs</a></li>
+          <li tabindex="-1" class="divider"></li>
+          <li><a href="#rebootModal" class="modal-trigger"><i class="material-icons">refresh</i>Reboot</a></li>
+          <li><a href="#shutdownModal" class="modal-trigger"><i class="material-icons">power_settings_new</i>Shutdown</a></li>
+        </ul>
       </div>
     </nav>
-    <!-- sidebar-->
-    <div id="sidebar" class="sidebar-toggle">
-      <ul class="nav nav-sidebar">
-        <li><a href="/"><i aria-hidden="true" class="fa fa-tachometer fa-lg fa-fw"></i><span>Dashboard</span></a></li>
-        <li role="separator" class="divider"></li>
-        <li><a href="/settings" class="active"><i aria-hidden="true" class="fa fa-cogs fa-lg fa-fw"></i><span>Settings</span></a></li>
-        <li role="separator" class="divider"></li>
-        <li><a href="/systemlogs"><i aria-hidden="true" class="fa fa-terminal fa-lg fa-fw"></i><span>System logs</span></a></li>
-        <li role="separator" class="divider"></li>
-        <li><a href="#" role="button" data-toggle="modal" data-target="#rebootModal"><i aria-hidden="true" class="fa fa-refresh fa-lg fa-fw"></i><span>Reboot</span></a></li>
-        <li role="separator" class="divider"></li>
-        <li><a href="#" role="button" data-toggle="modal" data-target="#shutdownModal"><i aria-hidden="true" class="fa fa-power-off fa-lg fa-fw"></i><span>Shutdown</span></a></li>
-        <li role="separator" class="divider"></li>
-      </ul>
-    </div>
-    <!-- /sidebar-->
-    <!-- Modal-->
-    <div id="rebootModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade">
-      <div role="document" class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 id="exampleModalLabel" class="modal-title">Reboot</h5>
-            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
-          </div>
-          <div class="modal-body">The page will break you'll have to mannually return to dashboard in a few minutes.</div>
-          <div class="modal-footer">
-            <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button><a href="/reboot" type="button" class="btn btn-warning">I'm sure</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="shutdownModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade">
-      <div role="document" class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 id="exampleModalLabel" class="modal-title">Shutdown</h5>
-            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
-          </div>
-          <div class="modal-body">This is terminal, you'll have to reboot the pi manually.</div>
-          <div class="modal-footer">
-            <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button><a href="/shutdown" type="button" class="btn btn-danger">I'm sure</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- /sidebar-->
-    <!-- page-content-wrapper-->
-    <div id="page-content-wrapper" class="page-content-toggle">
-      <div class="container-fluid">
+    <div class="container"> 
+      <div class="section"> 
         <div class="row">
-          <div class="col-xl-4">
-            <div class="card card-block">
-              <form action="/settings" method="post">
-                <h4 class="card-title m-b-2">Sensors
-                  <button type="submit" class="btn btn-sm btn-info pull-right">Save file</button>
-                </h4>
-                <div class="form-group">
-                  <input id="sensorName" input="hidden" name="file" value="sensors.config" hidden>
-                  <textarea id="sensorText" rows="10" input="text" name="content" class="form-control">{{printf "%s" .SensorFile}}</textarea>
-                </div>
-              </form>
-            </div>
-          </div>
-          <div class="col-xl-4">
-            <div class="card card-block">
-              <form action="/settings" method="post">
-                <h4 class="card-title m-b-2">Calibration
-                  <button type="submit" class="btn btn-sm btn-info pull-right">Save file</button>
-                </h4>
-                <div class="form-group">
-                  <input id="calibrationName" input="hidden" name="file" value="calibration.config" hidden>
-                  <textarea id="calibrationText" rows="10" input="text" name="content" class="form-control">{{printf "%s" .CalibrationFile}}</textarea>
-                </div>
-              </form>
-            </div>
-          </div>
-          <div class="col-xl-4">
-            <div class="card card-block">
-              <form action="/settings" method="post">
-                <h4 class="card-title m-b-2">Parameters
-                  <button type="submit" class="btn btn-sm btn-info pull-right">Save file</button>
-                </h4>
-                <div class="form-group">
-                  <input id="parametersName" input="hidden" name="file" value="parameters.config" hidden>
-                  <textarea id="parametersText" rows="10" input="text" name="content" class="form-control">{{printf "%s" .ParametersFile}}</textarea>
-                </div>
-              </form>
-            </div>
+          <div class="col s12">
+            <ul class="collapsible popout">
+              <li class="active">
+                <div class="collapsible-header"><i class="material-icons">whatshot</i>Sensors</div>
+                <div class="collapsible-body"><span> 
+                    <form action="/settings" method="post">
+                      <div class="row noMargins">
+                        <div class="input-field col s12 noMargins">
+                          <input id="sensorName" input="hidden" name="file" value="sensors.config" hidden><i class="material-icons prefix">mode_edit</i>
+                          <textarea rows="10" input="text" name="content" id="sensorText" class="materialize-textarea">{{printf "%s" .SensorFile}}</textarea>
+                          <button type="submit" name="action" class="btn waves-effect waves-light right">Submit<i class="material-icons right">send</i></button>
+                        </div>
+                      </div>
+                    </form></span></div>
+              </li>
+              <li>
+                <div class="collapsible-header"><i class="material-icons">filter_drama</i>Calibration</div>
+                <div class="collapsible-body"><span> 
+                    <form action="/settings" method="post">
+                      <div class="row noMargins">
+                        <div class="input-field col s12 noMargins">
+                          <input id="calibrationName" input="hidden" name="file" value="calibration.config" hidden><i class="material-icons prefix">mode_edit</i>
+                          <textarea rows="10" input="text" name="content" id="calibrationText" class="materialize-textarea">{{printf "%s" .CalibrationFile}}</textarea>
+                          <button type="submit" name="action" class="btn waves-effect waves-light right">Submit<i class="material-icons right">send</i></button>
+                        </div>
+                      </div>
+                    </form></span></div>
+              </li>
+              
+            </ul>
           </div>
         </div>
-        <!-- /3rd row-->
-        
       </div>
     </div>
+    <footer class="page-footer">
+      <div class="footer-copyright">
+        <div class="container center"><a href="https://github.com/willmendil/PoppyCon" target="_blank" class="grey-text text-lighten-4">Open source - programmed with &#128154; by willmendil for my dear Judith</a></div>
+      </div>
+    </footer>
   </body>
 </html>
+<div id="waterModal" class="modal">
+  <div class="modal-content">
+    <h4>Activate pumps</h4>
+    <p>Pressing a button will activate the given pump for 10 seconds.</p>
+    <ul>
+      <li>{{printf "%s" .LastWaterTop}}</li>
+      <li>{{printf "%s" .LastWaterBottom}}</li>
+    </ul>
+  </div>
+  <div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn">Close</a>
+    <button type="button" class="blockPump pump btn pink"> Top
+    </button>
+    <button type="button" class="blockPump pump btn blue"> Bottom
+    </button>
+  </div>
+</div>
+<div id="rebootModal" class="modal">
+  <div class="modal-content">
+    <h4>Reboot</h4>
+    <p>The page will break you'll have to mannually return to dashboard in a few minutes.</p>
+  </div>
+  <div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn">Close</a><a href="/reboot" class="waves-effect waves-orange btn btn-flat">I'm sure    </a></div>
+</div>
+<div id="shutdownModal" class="modal">
+  <div class="modal-content">
+    <h4>Shutdown</h4>
+    <p>This is terminal, you'll have to reboot the pi manually.</p>
+  </div>
+  <div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn">Close</a><a href="/shutdown" class="waves-effect waves-red btn btn-flat">I'm sure    </a></div>
+</div>
+<script rel="text/javascript" src="static/js/main.js"></script>
+<script rel="text/javascript" src="static/js/charts.js"></script>

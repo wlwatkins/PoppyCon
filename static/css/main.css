@@ -1,0 +1,39 @@
+.noMargins {
+  margin: 0;
+
+}
+
+.indicator {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  margin-bottom: 5px;
+}
+
+.noPadding {
+  padding: 0;
+}
+
+.mainBtn {
+  width: 80%;
+  max-width: 500px;
+}
+
+.progressCard {
+  min-height: 150px;
+}
+
+.badgeTop {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.btnBadge {
+  padding: 0px 8px 0px 8px;
+  cursor: auto;
+}
+
+.warningFont{
+  color: red;
+}
