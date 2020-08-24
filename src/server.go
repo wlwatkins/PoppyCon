@@ -258,7 +258,7 @@ func webServer() *gobot.Robot  {
 
       // http.HandleFunc("/settings/save", makeHandler(settingsSaveHandler))
 
-      log.Fatal(http.ListenAndServe(":81", nil))
+      log.Fatal(http.ListenAndServe(":80", nil))
        // }
   }
 

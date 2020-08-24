@@ -44,103 +44,103 @@ html(lang='en')
     
     
   body
-  
-    nav
-      .nav-wrapper
-          .center
-            a.waves-effect.waves-light.dropdown-trigger.btn.mainBtn(href='#', data-target='dropdown1')
-              | PoppyCon
-          // Dropdown Structure
-          ul#dropdown1.dropdown-content
-            li
-              a(href='/') 
-                i.material-icons dashboard
-                | Dashboard
-            li
-              a(href='/settings')
-                i.material-icons settings
-                | Settings
-            li
-              a(href='/calibration')
-                i.material-icons build
-                | Calibration
-            li
-              a.modal-trigger(href='#waterModal')
-                i.material-icons opacity
-                | Water
-            li
-              a(href='/systemlogs') 
-                i.material-icons last_page
-                | System logs
-            li.divider(tabindex='-1')
-            li
-              a.modal-trigger(href='#rebootModal')
-                i.material-icons refresh
-                | Reboot
-            li
-              a.modal-trigger(href='#shutdownModal')
-                i.material-icons power_settings_new
-                | Shutdown
-                
-
-    .container  
-      .section 
-      
-        .row
-          .col.s12
-          
-            ul.collapsible.popout
-              
-              li.active
-                .collapsible-header
-                  i.material-icons whatshot
-                  | Sensors
-                .collapsible-body
-                  span 
-                    form(action="/settings" method="post")
-                      .row.noMargins
-                        .input-field.col.s12.noMargins
-                          input#sensorName(input="hidden" name="file" value="sensors.config" hidden) 
-                          i.material-icons.prefix mode_edit
-                          textarea( rows='10' input="text" name="content")#sensorText.materialize-textarea
-                            {{printf "%s" .SensorFile}}
-                          button.btn.waves-effect.waves-light.right(type='submit', name='action')
-                            | Submit
-                            i.material-icons.right send
-
+    header
+      nav
+        .nav-wrapper
+            .center
+              a.waves-effect.waves-light.dropdown-trigger.btn.mainBtn(href='#', data-target='dropdown1')
+                | PoppyCon
+            // Dropdown Structure
+            ul#dropdown1.dropdown-content
               li
-                .collapsible-header
-                  i.material-icons filter_drama
+                a(href='/') 
+                  i.material-icons dashboard
+                  | Dashboard
+              li
+                a(href='/settings')
+                  i.material-icons settings
+                  | Settings
+              li
+                a(href='/calibration')
+                  i.material-icons build
                   | Calibration
-                .collapsible-body
-                  span 
-                    form(action="/settings" method="post")
-                      .row.noMargins
-                        .input-field.col.s12.noMargins
-                          input#calibrationName(input="hidden" name="file" value="calibration.config" hidden) 
-                          i.material-icons.prefix mode_edit
-                          textarea( rows='10' input="text" name="content")#calibrationText.materialize-textarea
-                            {{printf "%s" .CalibrationFile}}
-                          button.btn.waves-effect.waves-light.right(type='submit', name='action')
-                            | Submit
-                            i.material-icons.right send
-              //- li
-              //-   .collapsible-header
-              //-     i.material-icons place
-              //-     | Second
-              //-   .collapsible-body
-              //-     span 
-              //-       form(action="/settings" method="post")
-              //-         .row.noMargins
-              //-           .input-field.col.s12.noMargins
-              //-             input#parametersName(input="hidden" name="file" value="parameters.config" hidden) 
-              //-             i.material-icons.prefix mode_edit
-              //-             textarea( rows='10' input="text" name="content")#parametersText.materialize-textarea
-              //-               {{printf "%s" .ParametersFile}}
-              //-             button.btn.waves-effect.waves-light.right(type='submit', name='action')
-              //-               | Submit
-              //-               i.material-icons.right send
-                        
+              li
+                a.modal-trigger(href='#waterModal')
+                  i.material-icons opacity
+                  | Water
+              li
+                a(href='/systemlogs') 
+                  i.material-icons last_page
+                  | System logs
+              li.divider(tabindex='-1')
+              li
+                a.modal-trigger(href='#rebootModal')
+                  i.material-icons refresh
+                  | Reboot
+              li
+                a.modal-trigger(href='#shutdownModal')
+                  i.material-icons power_settings_new
+                  | Shutdown
+                  
+    main
+      .container  
+        .section 
+        
+          .row
+            .col.s12
+            
+              ul.collapsible.popout
+                
+                li.active
+                  .collapsible-header
+                    i.material-icons whatshot
+                    | Sensors
+                  .collapsible-body
+                    span 
+                      form(action="/settings" method="post")
+                        .row.noMargins
+                          .input-field.col.s12.noMargins
+                            input#sensorName(input="hidden" name="file" value="sensors.config" hidden) 
+                            i.material-icons.prefix mode_edit
+                            textarea( rows='10' input="text" name="content")#sensorText.materialize-textarea
+                              {{printf "%s" .SensorFile}}
+                            button.btn.waves-effect.waves-light.right(type='submit', name='action')
+                              | Submit
+                              i.material-icons.right send
+
+                li
+                  .collapsible-header
+                    i.material-icons filter_drama
+                    | Calibration
+                  .collapsible-body
+                    span 
+                      form(action="/settings" method="post")
+                        .row.noMargins
+                          .input-field.col.s12.noMargins
+                            input#calibrationName(input="hidden" name="file" value="calibration.config" hidden) 
+                            i.material-icons.prefix mode_edit
+                            textarea( rows='10' input="text" name="content")#calibrationText.materialize-textarea
+                              {{printf "%s" .CalibrationFile}}
+                            button.btn.waves-effect.waves-light.right(type='submit', name='action')
+                              | Submit
+                              i.material-icons.right send
+                //- li
+                //-   .collapsible-header
+                //-     i.material-icons place
+                //-     | Second
+                //-   .collapsible-body
+                //-     span 
+                //-       form(action="/settings" method="post")
+                //-         .row.noMargins
+                //-           .input-field.col.s12.noMargins
+                //-             input#parametersName(input="hidden" name="file" value="parameters.config" hidden) 
+                //-             i.material-icons.prefix mode_edit
+                //-             textarea( rows='10' input="text" name="content")#parametersText.materialize-textarea
+                //-               {{printf "%s" .ParametersFile}}
+                //-             button.btn.waves-effect.waves-light.right(type='submit', name='action')
+                //-               | Submit
+                //-               i.material-icons.right send
+                          
     
     footer.page-footer
       .footer-copyright

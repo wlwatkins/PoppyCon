@@ -44,96 +44,96 @@ html(lang='en')
     
     
   body
-  
-    nav
-      .nav-wrapper
-          .center
-            a.waves-effect.waves-light.dropdown-trigger.btn.mainBtn(href='#', data-target='dropdown1')
-              | PoppyCon
-          // Dropdown Structure
-          ul#dropdown1.dropdown-content
-            li
-              a(href='/') 
-                i.material-icons dashboard
-                | Dashboard
-            li
-              a(href='/settings')
-                i.material-icons settings
-                | Settings
-            li
-              a(href='/calibration')
-                i.material-icons build
-                | Calibration
-            li
-              a.modal-trigger(href='#waterModal')
-                i.material-icons opacity
-                | Water
-            li
-              a(href='/systemlogs') 
-                i.material-icons last_page
-                | System logs
-            li.divider(tabindex='-1')
-            li
-              a.modal-trigger(href='#rebootModal')
-                i.material-icons refresh
-                | Reboot
-            li
-              a.modal-trigger(href='#shutdownModal')
-                i.material-icons power_settings_new
-                | Shutdown
-                
-
-    .container  
-      .section 
-      
-        .row
-          .col.s12
-            .card.cyan.lighten-5
-              .card-content
-                span.card-title 
+    header
+      nav
+        .nav-wrapper
+            .center
+              a.waves-effect.waves-light.dropdown-trigger.btn.mainBtn(href='#', data-target='dropdown1')
+                | PoppyCon
+            // Dropdown Structure
+            ul#dropdown1.dropdown-content
+              li
+                a(href='/') 
+                  i.material-icons dashboard
+                  | Dashboard
+              li
+                a(href='/settings')
+                  i.material-icons settings
+                  | Settings
+              li
+                a(href='/calibration')
+                  i.material-icons build
                   | Calibration
-                
-                  .switch.right
-                    label
-                      | Off
-                      input#calibSwitch(type='checkbox')
-                      span.lever
-                      |       On
-            
-                .input-field.col.s12
+              li
+                a.modal-trigger(href='#waterModal')
+                  i.material-icons opacity
+                  | Water
+              li
+                a(href='/systemlogs') 
+                  i.material-icons last_page
+                  | System logs
+              li.divider(tabindex='-1')
+              li
+                a.modal-trigger(href='#rebootModal')
+                  i.material-icons refresh
+                  | Reboot
+              li
+                a.modal-trigger(href='#shutdownModal')
+                  i.material-icons power_settings_new
+                  | Shutdown
                   
-                  select#sensorSelect
-                    option(value='', disabled='', selected='') Choose sensor
-                    {{range .Sensor}}
-                    option(value="{{.}}") {{.}}
-                    {{end}}
-                  label Sensor
+    main
+      .container  
+        .section 
+        
+          .row
+            .col.s12
+              .card.cyan.lighten-5
+                .card-content
+                  span.card-title 
+                    | Calibration
                   
-
-                  
-                .row
-                  .col.s12
-                    .progress
-                      .determinate#cycleBar(style='width: 0%')
-
-                .row.badgeTop.center.white-text.noPadding
-                  .col.s12
-                    button#rawValue.btn.btn-large.btnBadge
-                      | --
-                  
-                
+                    .switch.right
+                      label
+                        | Off
+                        input#calibSwitch(type='checkbox')
+                        span.lever
+                        |       On
               
-                span 
-                  form(action="/settings" method="post")
-                    .row.noMargins
-                      .input-field.col.s12.noMargins
-                        input#calibrationName(input="hidden" name="file" value="calibration.config" hidden) 
-                        i.material-icons.prefix mode_edit
-                        textarea( rows='10' input="text" name="content")#calibrationText.materialize-textarea
-                          {{printf "%s" .CalibrationFile}}
-                        button.btn.waves-effect.waves-light.right(type='submit', name='action')
-                          | Submit
-                          i.material-icons.right send
+                  .input-field.col.s12
+                    
+                    select#sensorSelect
+                      option(value='', disabled='', selected='') Choose sensor
+                      {{range .Sensor}}
+                      option(value="{{.}}") {{.}}
+                      {{end}}
+                    label Sensor
+                    
+
+                    
+                  .row
+                    .col.s12
+                      .progress
+                        .determinate#cycleBar(style='width: 0%')
+
+                  .row.badgeTop.center.white-text.noPadding
+                    .col.s12
+                      button#rawValue.btn.btn-large.btnBadge
+                        | --
+                    
+                  
+                
+                  span 
+                    form(action="/settings" method="post")
+                      .row.noMargins
+                        .input-field.col.s12.noMargins
+                          input#calibrationName(input="hidden" name="file" value="calibration.config" hidden) 
+                          i.material-icons.prefix mode_edit
+                          textarea( rows='10' input="text" name="content")#calibrationText.materialize-textarea
+                            {{printf "%s" .CalibrationFile}}
+                          button.btn.waves-effect.waves-light.right(type='submit', name='action')
+                            | Submit
+                            i.material-icons.right send
                 
               
 

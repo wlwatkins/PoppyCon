@@ -44,62 +44,62 @@ html(lang='en')
     
     
   body
-  
-    nav
-      .nav-wrapper
-          .center
-            a.waves-effect.waves-light.dropdown-trigger.btn.mainBtn(href='#', data-target='dropdown1')
-              | PoppyCon
-          // Dropdown Structure
-          ul#dropdown1.dropdown-content
-            li
-              a(href='/') 
-                i.material-icons dashboard
-                | Dashboard
-            li
-              a(href='/settings')
-                i.material-icons settings
-                | Settings
-            li
-              a(href='/calibration')
-                i.material-icons build
-                | Calibration
-            li
-              a.modal-trigger(href='#waterModal')
-                i.material-icons opacity
-                | Water
-            li
-              a(href='/systemlogs') 
-                i.material-icons last_page
-                | System logs
-            li.divider(tabindex='-1')
-            li
-              a.modal-trigger(href='#rebootModal')
-                i.material-icons refresh
-                | Reboot
-            li
-              a.modal-trigger(href='#shutdownModal')
-                i.material-icons power_settings_new
-                | Shutdown
-                
+    header
+      nav
+        .nav-wrapper
+            .center
+              a.waves-effect.waves-light.dropdown-trigger.btn.mainBtn(href='#', data-target='dropdown1')
+                | PoppyCon
+            // Dropdown Structure
+            ul#dropdown1.dropdown-content
+              li
+                a(href='/') 
+                  i.material-icons dashboard
+                  | Dashboard
+              li
+                a(href='/settings')
+                  i.material-icons settings
+                  | Settings
+              li
+                a(href='/calibration')
+                  i.material-icons build
+                  | Calibration
+              li
+                a.modal-trigger(href='#waterModal')
+                  i.material-icons opacity
+                  | Water
+              li
+                a(href='/systemlogs') 
+                  i.material-icons last_page
+                  | System logs
+              li.divider(tabindex='-1')
+              li
+                a.modal-trigger(href='#rebootModal')
+                  i.material-icons refresh
+                  | Reboot
+              li
+                a.modal-trigger(href='#shutdownModal')
+                  i.material-icons power_settings_new
+                  | Shutdown
+                  
+    main
+      .container  
+        .section 
+        
+          .row
+            .col.s12
+              .card.blue-grey.darken-1
+                .card-content.white-text
+                  span.card-title System logs
+              
+              
+                  pre
+                    code.code-content
+                        {{printf "%s" .Message}}
+                  
+                        
 
-    .container  
-      .section 
       
-        .row
-          .col.s12
-            .card.blue-grey.darken-1
-              .card-content.white-text
-                span.card-title System logs
-            
-            
-                pre
-                  code.code-content
-                      {{printf "%s" .Message}}
-                
-                      
-
-    
     footer.page-footer
       .footer-copyright
         .container.center

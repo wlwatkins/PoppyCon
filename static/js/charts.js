@@ -14,9 +14,13 @@ $(function () {
     }
   }
 
+  function map(x, in_min, in_max, out_min, out_max) {
+		return (x-in_min)*(out_max-out_min)/(in_max-in_min) + out_min
+	}
 
 
-  function drawChart(data, htmlID, chartID, chartTitle, chartYAxis, unit) {
+
+  function drawChart(data, htmlID, chartID, chartTitle, chartYAxis, unit, dayNight) {
 
 
     var series = [];
@@ -29,8 +33,14 @@ $(function () {
         var calib100 = obj["Calib"]["HundredPCT"]
         var orgData = obj["Data"]
         var procData =[];
+        var value = 0;
         for (var j = 0; j < orgData.length; j++) {
-          procData.push([orgData[j]["Date"]*1000, orgData[j]["Value"]])
+          if (calib0 != "") {
+            value = map(orgData[j]["Value"], calib0, calib100, 0, 100);
+          } else {
+            value = orgData[j]["Value"];
+          }
+          procData.push([orgData[j]["Date"]*1000, value]);
         }
 
         // if (procData.length) {
@@ -45,7 +55,12 @@ $(function () {
     avg = avg / data.length
     $(htmlID).append(avg.toFixed(2), unit)
 
-
+    var dnSeries = []
+    for (i = 0; i < dayNight.length; i++) {
+      dnSeries.push({color: 'orange',
+                    from: dayNight[i]['SunRiseEpoch']*1000,
+                    to: dayNight[i]['SunSetEpoch']*1000})
+    }
 
 
 
@@ -71,11 +86,12 @@ $(function () {
               text: 'Date time'
           },
           type: 'datetime',
-          plotBands: [{
-            color: 'orange', // Color value
-            from: 1167696000000, // Start of the plot band
-            to: 1167868800000 // End of the plot band
-          }],
+          plotBands: dnSeries,
+          // [{
+          //   color: 'orange', // Color value
+          //   from: 1167696000000, // Start of the plot band
+          //   to: 1167868800000 // End of the plot band
+          // }],
         },
 
         legend: {
@@ -128,12 +144,13 @@ $(function () {
   			console.log(rawData);
         console.log("##################");
 
+        var dayNight = rawData['DayNight'];
         // MOISTER STUFF
         var moistureData = rawData["Data"]['MOISTURE'];
 
         if (moistureData != undefined){
 
-          avg = drawChart(moistureData, "#humPlant", 'chartHum', 'Humidity', 'Moisture [%]', "%");
+          avg = drawChart(moistureData, "#humPlant", 'chartHum', 'Humidity', 'Moisture [%]', "%", dayNight);
 
           if (avg < 20) {
             $("#humPlant").addClass("amber darken-2");
@@ -151,7 +168,7 @@ $(function () {
 
         if (temperatureData != undefined){
 
-          avg = drawChart(temperatureData, "#tempPlant", 'chartTemp', 'Temperature', 'Temperature [°C]', "°C");
+          avg = drawChart(temperatureData, "#tempPlant", 'chartTemp', 'Temperature', 'Temperature [°C]', "°C", dayNight);
 
           if (avg <= 0) {
             $("#tempPlant").addClass("blue darken-3");
@@ -169,7 +186,7 @@ $(function () {
 
         if (tempDHTData != undefined){
 
-          avg = drawChart(tempDHTData, "#tempAir", 'chartDHTTemp', 'Ambient temperature', 'Temperature [°C]', "°C");
+          avg = drawChart(tempDHTData, "#tempAir", 'chartDHTTemp', 'Ambient temperature', 'Temperature [°C]', "°C", dayNight);
 
           if (avg <= 0) {
             $("#tempAir").addClass("blue darken-3");
@@ -187,7 +204,7 @@ $(function () {
 
         if (moistDHTData != undefined){
 
-          avg = drawChart(moistDHTData, "#humAir", 'chartDHTHum', 'Ambient humidity', 'Moisture [%]', "%");
+          avg = drawChart(moistDHTData, "#humAir", 'chartDHTHum', 'Ambient humidity', 'Moisture [%]', "%", dayNight);
 
           if (avg < 20) {
             $("#humAir").addClass("amber darken-2");
@@ -205,7 +222,7 @@ $(function () {
         var lightData = rawData["Data"]['LIGHT'];
 
         if (lightData != undefined){
-          avg = drawChart(lightData, "#lightPlant", 'chartLight', 'Light', 'Light [%]', "%");
+          avg = drawChart(lightData, "#lightPlant", 'chartLight', 'Light', 'Light [%]', "%", dayNight);
         }
 
 
