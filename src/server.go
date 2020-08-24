@@ -10,7 +10,7 @@ import (
   "regexp"
   "time"
   "strings"
-  // "syscall"
+  "syscall"
   "gobot.io/x/gobot"
 )
 
@@ -194,15 +194,15 @@ func rebootHandler(w http.ResponseWriter, r *http.Request) {
   switch r.Method {
     case "GET":
       fmt.Fprintf(w, "<p>Rebooting PoppyCon - Wait a few minutes and go back home <a href='/' > <- Dashboard</a></p>")
-      // gobot.After(5*time.Second, func() {
-      //     // fmt.Println(n)
-      //     err := syscall.Reboot(syscall.LINUX_REBOOT_CMD_RESTART)
-      //     if err != nil{
-      //       log.Println(err)
-      //       fmt.Fprintf(w, "<p>Error, could not reboot <a href='/' > <- Dashboard</a></p>")
-      //     }
-      //
-      // })
+      gobot.After(5*time.Second, func() {
+          // fmt.Println(n)
+          err := syscall.Reboot(syscall.LINUX_REBOOT_CMD_RESTART)
+          if err != nil{
+            log.Println(err)
+            fmt.Fprintf(w, "<p>Error, could not reboot <a href='/' > <- Dashboard</a></p>")
+          }
+
+      })
 
 
     default:
@@ -214,13 +214,13 @@ func shutdownHandler(w http.ResponseWriter, r *http.Request) {
   switch r.Method {
     case "GET":
       fmt.Fprintf(w, "<p>Shutting down PoppyCon! You'll need to boot it up manually...</p>")
-      // gobot.After(5*time.Second, func() {
-      //   err := syscall.Reboot(syscall.LINUX_REBOOT_CMD_POWER_OFF)
-      //   if err != nil{
-      //     log.Println(err)
-      //     fmt.Fprintf(w, "<p>Error, could not shutdown <a href='/' > <- Dashboard</a></p>")
-      //   }
-      // })
+      gobot.After(5*time.Second, func() {
+        err := syscall.Reboot(syscall.LINUX_REBOOT_CMD_POWER_OFF)
+        if err != nil{
+          log.Println(err)
+          fmt.Fprintf(w, "<p>Error, could not shutdown <a href='/' > <- Dashboard</a></p>")
+        }
+      })
 
 
     default:
