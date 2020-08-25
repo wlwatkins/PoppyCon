@@ -255,13 +255,56 @@ func calibSensor(sensor string) float64{
   return v
 }
 
+func makeFirstMeasurement(tempsChan temps, dht *dht.DHT) {
+  var data []dbSensorRow
+
+  fmt.Println("start")
+  for {
+    select {
+    case job := <- doMeaChan:
+
+      fmt.Println(job)
+
+      switch job {
+      case 1:
+        //Get temperatures
+        data = getTemps(tempsChan)
+        for _, d := range data{
+          insertSensorDB(d)
+        }
+
+        //Get humidity
+        data = getI2CSensor(hum, 1)
+        for _, d := range data{
+          insertSensorDB(d)
+        }
+
+        //Get light
+        data = getI2CSensor(light, 2)
+        for _, d := range data{
+          insertSensorDB(d)
+        }
+
+        //Get DHT
+        data, _ = readDHT22(dht)
+        for _, d := range data{
+          insertSensorDB(d)
+        }
+
+      case 2:
+      updateDayNight()
+      }
+
+    }
+	}
+
+}
+
 func SensorAcquisition(db *sql.DB) *gobot.Robot {
   rpi := raspi.NewAdaptor()
 
-  var data []dbSensorRow
-
-
   tempsChanIn = make(chan int)
+  doMeaChan = make(chan int)
   tempsChanOut = make(chan map[string]float64)
   tempsChan := temps{ ChannelIn: tempsChanIn,
                       ChannelOut: tempsChanOut}
@@ -285,69 +328,20 @@ func SensorAcquisition(db *sql.DB) *gobot.Robot {
     fmt.Println("NewDHT error:", err)
   }
 
-
-
   work := func() {
 
           go readOneWire(tempsChan)
-          updateDayNight()
-          //Get temperatures
-          data = getTemps(tempsChan)
-          for _, d := range data{
-            insertSensorDB(d)
-          }
 
-          //Get humidity
-          data = getI2CSensor(hum, 1)
-          for _, d := range data{
-            insertSensorDB(d)
-          }
+          go makeFirstMeasurement(tempsChan, dht)
+          doMeaChan <- 1
+          doMeaChan <- 2
 
-          //Get light
-          data = getI2CSensor(light, 2)
-          for _, d := range data{
-            insertSensorDB(d)
-          }
-
-          //Get DHT
-          data, err = readDHT22(dht)
-          for _, d := range data{
-            insertSensorDB(d)
-          }
           gobot.Every(900*time.Second, func() {
-
-                  //Get temperatures
-                  data = getTemps(tempsChan)
-                  for _, d := range data{
-                    insertSensorDB(d)
-                  }
-
-                  //Get humidity
-                  data = getI2CSensor(hum, 1)
-                  for _, d := range data{
-                    insertSensorDB(d)
-                  }
-
-                  //Get light
-                  data = getI2CSensor(light, 2)
-                  for _, d := range data{
-                    insertSensorDB(d)
-                  }
-
-                  //Get DHT
-                  data, err = readDHT22(dht)
-                  for _, d := range data{
-                    insertSensorDB(d)
-                  }
-
-
+            doMeaChan <- 1
           })
 
           gobot.Every(12*time.Hour, func() {
-
-                  updateDayNight()
-
-
+            doMeaChan <- 2
           })
   }
 

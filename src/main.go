@@ -14,6 +14,7 @@ var (
   pumpChan chan int
   tempsChanIn chan int
   tempsChanOut chan map[string]float64
+  doMeaChan chan int
   relay1State bool
   relay2State bool
   hum *i2c.ADS1x15Driver
@@ -23,10 +24,10 @@ var (
 
 func main() {
 
-  _, err := os.Stat("../sqlite-database.db")
-  db, _ = sql.Open("sqlite3", "../sqlite-database.db")
+  _, err := os.Stat("sqlite-database.db")
+  db, _ = sql.Open("sqlite3", "sqlite-database.db")
   if os.IsNotExist(err) {
-      createTable(db)
+    createTable(db)
   }
   defer db.Close() // Defer Closing the database
   pumpChan = make(chan int)

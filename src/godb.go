@@ -69,6 +69,8 @@ func createTable(db *sql.DB) {
   var createTableSQL string
   var statement *sql.Stmt
   var err error
+  doMeaChan = make(chan int)
+
 
 	createTableSQL = `CREATE TABLE sensors (
 		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -114,6 +116,15 @@ func createTable(db *sql.DB) {
 		log.Fatal(err.Error())
 	}
 	statement.Exec() // Execute SQL Statements
+
+  doMeaChan <- 1 // Send byte to chan to get initial measurements (1: Sensors)
+  doMeaChan <- 2 // (2: Day night times)
+
+}
+
+func deleteDB() bool {
+  var err = os.Remove("sqlite-database.db")
+  return (err != nil)
 
 }
 

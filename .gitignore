@@ -1,7 +1,8 @@
 venv
 winenv
 data.db
-data.db-wal 
-data.db-shm 
+data.db-wal
+data.db-shm
 utils/logs
 old
+sqlite-database.db

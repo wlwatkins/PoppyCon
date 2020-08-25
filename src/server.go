@@ -113,6 +113,21 @@ func waterHandler(w http.ResponseWriter, r *http.Request) {
   }
 }
 
+func resetDBHandler(w http.ResponseWriter, r *http.Request) {
+  switch r.Method {
+  case "POST":
+    ok := deleteDB()
+    if ok{
+      json.NewEncoder(w).Encode("done")
+    }else{
+      json.NewEncoder(w).Encode("error")
+    }
+
+    default:
+        fmt.Fprintf(w, "Sorry, only POST methods are supported.")
+  }
+}
+
 func settingsHandler(w http.ResponseWriter, r *http.Request) {
   switch r.Method {
     case "GET":
