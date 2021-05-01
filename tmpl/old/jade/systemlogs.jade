@@ -1,0 +1,110 @@
+//output:../systemlogs.html, pretty:true
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title Poppy Con - Dashboard
+    link(rel='icon', type='image/png', href='static/img/poppyconLogo.png')
+    // stylesheets
+    link(href='static/fonts/font-roboto.css', type="text/css", rel='stylesheet')
+    link(href='static/bootstrap/bootstrap.min.css', type="text/css", rel='stylesheet')
+    link(href='static/font-awesome/css/font-awesome.min.css', type="text/css", rel='stylesheet')
+    link(href='static/poppycon/style.css', type="text/css", rel='stylesheet')
+    // scripts
+    script(src='static/jquery/jquery.min.js')
+    script(src='static/moment/moment.js')
+    script(src='static/tether/tether.min.js')
+    script(src='static/bootstrap/bootstrap.min.js')
+    script(src='static/canvasjs/canvasjs.min.js')
+    script(src='static/poppycon/main.js')
+    script(src='static/poppycon/customCharts.js')
+
+  body
+    // header
+    nav#header.navbar.navbar-fixed-top
+      .container-fluid
+        .navbar-header
+          #sidebar-toggle-button
+            i.fa.fa-bars(aria-hidden='true')
+          .brand
+            a(href='/')
+              span.hidden-xs-down.m-r-3 Poppy Con
+              span.lead Dashboard
+    
+  
+    // sidebar
+    #sidebar.sidebar-toggle
+      ul.nav.nav-sidebar
+        li
+          a(href='/')
+            i.fa.fa-tachometer.fa-lg.fa-fw(aria-hidden='true')
+            span Dashboard
+        li.divider(role='separator')
+        li
+          a(href='/settings')
+            i.fa.fa-cogs.fa-lg.fa-fw(aria-hidden='true')
+            span Settings
+        li.divider(role='separator')
+        li
+          a.active(href='/systemlogs')
+            i.fa.fa-terminal.fa-lg.fa-fw(aria-hidden='true')
+            span System logs
+        li.divider(role='separator')
+        li
+          a(href="#", role="button", data-toggle="modal", data-target="#rebootModal")
+            i.fa.fa-refresh.fa-lg.fa-fw(aria-hidden='true')
+            span Reboot
+        li.divider(role='separator')
+        li
+          a(href="#", role="button", data-toggle="modal", data-target="#shutdownModal")
+            i.fa.fa-power-off.fa-lg.fa-fw(aria-hidden='true')
+            span Shutdown
+        li.divider(role='separator')
+    // /sidebar
+    
+    // Modal
+    #rebootModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+      .modal-dialog(role='document')
+        .modal-content
+          .modal-header
+            h5#exampleModalLabel.modal-title Reboot
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            | The page will break you'll have to mannually return to dashboard in a few minutes.
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+            a(href='/reboot').btn.btn-warning(type='button') I'm sure
+    
+    #shutdownModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+      .modal-dialog(role='document')
+        .modal-content
+          .modal-header
+            h5#exampleModalLabel.modal-title Shutdown
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            | This is terminal, you'll have to reboot the pi manually.
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+            a(href='/shutdown').btn.btn-danger(type='button') I'm sure
+    // page-content-wrapper
+    #page-content-wrapper.page-content-toggle
+      .container-fluid
+        .row
+          .col-xl
+            .card.card-block
+              h4.card-title.m-b-2
+                | System logs
+              
+              pre
+                code.code-content
+                    {{printf "%s" .Message}}
+              
+                    
+
+        // /3rd row
+  
+      

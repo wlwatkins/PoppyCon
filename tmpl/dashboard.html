@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Poppy Con</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="icon" type="image/png" href="static/img/poppyconLogo.png">
+    <link rel="stylesheet" href="static/vendor/normalize/normalize.css">
+    <!-- VENDOR CSS-->
+    <link rel="stylesheet" href="static/vendor/materialize/css/materialize.min.css">
+    <link rel="stylesheet" href="static/vendor/highcharts/highcharts.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/main.css">
+    <!-- MAIN CSS-->
+    
+    <script rel="text/javascript" src="static/vendor/jquery/jquery.min.js"></script>
+    <script rel="text/javascript" src="static/vendor/materialize/js/materialize.min.js"></script>
+    <script rel="text/javascript" src="static/vendor/moment/moment.js"></script>
+    <script rel="text/javascript" src="static/vendor/moment/moment-timezone.js"></script>
+    <script rel="text/javascript" src="static/vendor/moment/moment-timezone-with-data.js"></script>
+    <script rel="text/javascript" src="static/vendor/highcharts/highcharts.js"></script>
+    <script rel="text/javascript" src="static/vendor/highcharts/modules/timeline.js"></script>
+    <script rel="text/javascript" src="static/vendor/highcharts/modules/series-label.js"></script>
+    <script rel="text/javascript" src="static/vendor/highcharts/modules/exporting.js"></script>
+    <script rel="text/javascript" src="static/vendor/highcharts/modules/export-data.js"></script>
+    
+    
+    
+    
+    
+  </head>
+  <body>
+    <nav>
+      <div class="nav-wrapper">
+        <div class="center"><a href="#" data-target="dropdown1" class="waves-effect waves-light dropdown-trigger btn mainBtn">PoppyCon</a></div>
+        <!-- Dropdown Structure-->
+        <ul id="dropdown1" class="dropdown-content">
+          <li><a href="/"> <i class="material-icons">dashboard</i>Dashboard</a></li>
+          <li><a href="/settings"><i class="material-icons">settings</i>Settings</a></li>
+          <li><a href="/calibration"><i class="material-icons">build</i>Calibration</a></li>
+          <li><a href="#waterModal" class="modal-trigger"><i class="material-icons">opacity</i>Water</a></li>
+          <li><a href="/systemlogs"> <i class="material-icons">last_page</i>System logs</a></li>
+          <li tabindex="-1" class="divider"></li>
+          <li><a href="#rebootModal" class="modal-trigger"><i class="material-icons">refresh</i>Reboot</a></li>
+          <li><a href="#shutdownModal" class="modal-trigger"><i class="material-icons">power_settings_new</i>Shutdown</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div>
+      <div class="section"> 
+        <div class="row">
+          <div class="col xl3 l4 m6 s12">
+            <div class="card-panel noMargins indicator"><span>
+                <blockquote class="noMargins">
+                   
+                  Humidity<i class="material-icons right warningFont hide">warning</i>
+                </blockquote>
+                <div class="row badgeTop center white-text noPadding">
+                  <div class="col s6">
+                    <button id="humPlant" class="btn waves-effect waves-light btnBadge"><i class="material-icons left">local_florist</i></button>
+                  </div>
+                  <div class="col s6">
+                    <button id="humAir" class="btn waves-effect waves-light btnBadge"><i class="material-icons left">cloud</i></button>
+                  </div>
+                </div></span></div>
+          </div>
+          <div class="col xl3 l4 m6 s12">
+            <div class="card-panel noMargins indicator"><span>
+                <blockquote class="noMargins">
+                   
+                  Temperature<i class="material-icons right warningFont hide">warning</i>
+                </blockquote>
+                <div class="row badgeTop center white-text noPadding">
+                  <div class="col s6">
+                    <button id="tempPlant" class="btn waves-effect waves-light btnBadge"><i class="material-icons left">local_florist</i></button>
+                  </div>
+                  <div class="col s6">
+                    <button id="tempAir" class="btn waves-effect waves-light btnBadge"><i class="material-icons left">cloud</i></button>
+                  </div>
+                </div></span></div>
+          </div>
+          <div class="col xl3 l4 m6 s12">
+            <div class="card-panel noMargins indicator"><span>
+                <blockquote class="noMargins">Light</blockquote>
+                <div class="row badgeTop center white-text noPadding">
+                  <div class="col s12">
+                    <button id="lightPlant" class="btn waves-effect waves-light btnBadge"><i class="material-icons left">brightness_medium</i></button>
+                  </div>
+                </div></span></div>
+          </div>
+          <div class="col xl3 l4 m6 s12">
+            <div class="card-panel noMargins indicator"><span>
+                <blockquote class="noMargins">Date & time</blockquote>
+                <div class="row badgeTop center white-text noPadding">
+                  <div class="col s6">
+                    <button id="currentDate" class="btn waves-effect waves-light btnBadge blue"></button>
+                  </div>
+                  <div class="col s6">
+                    <button id="currentTime" class="btn waves-effect waves-light btnBadge blue"></button>
+                  </div>
+                </div></span></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col l4 s12">
+            <div class="card-panel noPadding noMargins">
+              <div class="progress">
+                <div class="indeterminate"></div>
+              </div>
+              <figure class="highcharts-figure noMargins">
+                <div id="chartTemp"></div>
+              </figure>
+            </div>
+          </div>
+          <div class="col l4 s12">
+            <div class="card-panel noPadding noMargins">
+              <div class="progress">
+                <div class="indeterminate"></div>
+              </div>
+              <figure class="highcharts-figure noMargins">
+                <div id="chartHum"></div>
+              </figure>
+            </div>
+          </div>
+          <div class="col l4 s12">
+            <div class="card-panel noPadding noMargins">
+              <div class="progress">
+                <div class="indeterminate"></div>
+              </div>
+              <figure class="highcharts-figure noMargins">
+                <div id="chartLight"></div>
+              </figure>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col l6 s12">
+            <div class="card-panel noPadding noMargins">
+              <div class="progress">
+                <div class="indeterminate"></div>
+              </div>
+              <figure class="highcharts-figure noMargins">
+                <div id="chartDHTTemp"></div>
+              </figure>
+            </div>
+          </div>
+          <div class="col l6 s12">
+            <div class="card-panel noPadding noMargins">
+              <div class="progress">
+                <div class="indeterminate"></div>
+              </div>
+              <figure class="highcharts-figure noMargins">
+                <div id="chartDHTHum"></div>
+              </figure>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12">
+            <div class="card-panel noPadding noMargins">
+              <div class="progress">
+                <div class="indeterminate"></div>
+              </div>
+              <figure class="highcharts-figure noMargins">
+                <div id="chartTimeline"></div>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="page-footer">
+      <div class="footer-copyright">
+        <div class="container center"><a href="https://github.com/willmendil/PoppyCon" target="_blank" class="grey-text text-lighten-4">Open source - programmed with &#128154; by willmendil for my dear Judith</a></div>
+      </div>
+    </footer>
+  </body>
+</html>
+<div id="waterModal" class="modal">
+  <div class="modal-content">
+    <h4>Activate pumps</h4>
+    <p>Pressing a button will activate the given pump for 10 seconds.</p>
+    <ul>
+      <li>{{printf "%s" .LastWaterTop}}</li>
+      <li>{{printf "%s" .LastWaterBottom}}</li>
+    </ul>
+  </div>
+  <div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn">Close</a>
+    <button type="button" class="blockPump pump btn pink"> Top
+    </button>
+    <button type="button" class="blockPump pump btn blue"> Bottom
+    </button>
+  </div>
+</div>
+<div id="rebootModal" class="modal">
+  <div class="modal-content">
+    <h4>Reboot</h4>
+    <p>The page will break you'll have to mannually return to dashboard in a few minutes.</p>
+  </div>
+  <div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn">Close</a><a href="/reboot" class="waves-effect waves-orange btn btn-flat">I'm sure    </a></div>
+</div>
+<div id="shutdownModal" class="modal">
+  <div class="modal-content">
+    <h4>Shutdown</h4>
+    <p>This is terminal, you'll have to reboot the pi manually.</p>
+  </div>
+  <div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn">Close</a><a href="/shutdown" class="waves-effect waves-red btn btn-flat">I'm sure    </a></div>
+</div>
+<script rel="text/javascript" src="static/js/main.js"></script>
+<script rel="text/javascript" src="static/js/charts.js"></script>

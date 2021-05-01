@@ -1,0 +1,1 @@
+env GOOS=linux GOARCH=arm GOARM=5 CGO_ENABLED=1 CC=arm-linux-gnueabihf-gcc go build src/*
