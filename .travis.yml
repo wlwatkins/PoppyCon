@@ -8,7 +8,8 @@ env:
   - GOARM=5
   - CGO_ENABLED=1
   - CC=arm-linux-gnueabihf-gcc
-
+before_install:
+  - go get -d -u gobot.io/x/gobot/...
 # # Includes
 linux_deps: &linux_deps
   os: linux
