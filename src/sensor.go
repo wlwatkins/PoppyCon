@@ -115,12 +115,28 @@ func getI2CSensor(sensorI2C *i2c.ADS1x15Driver, valType int) []dbSensorRow {
 
 func readDHT22(dht *dht.DHT) ([]dbSensorRow, error) {
 	data := []dbSensorRow{}
-	humidity, temperature, err := dht.Read()
-	if err != nil {
-		log.Println("Read error:", err)
-		return data, errors.New("can't read DHT")
+	var humidity = 0.0
+	var temperature = 0.0
+	var err error
+	i := 0
+	for {
+		time.Sleep(1 * time.Second)
+		if i > 50 {
+			return data, errors.New("can't read DHT")
+		}
+		humidity, temperature, err = dht.Read()
+		if err != nil {
+			log.Println("Read error:", err)
+			i++
+			continue
+		}
+
+		log.Printf("DHT humidity: %v\n", humidity)
+		log.Printf("DHT temperature: %v\n", temperature)
+		break
 	}
 
+	time.Sleep(1 * time.Second)
 	data = append(data, dbSensorRow{sensorType: "dhtHum",
 		sensorID:   "dhtHum",
 		date:       time.Now().Unix(),
@@ -254,10 +270,40 @@ func calibSensor(sensor string) float64 {
 	return v
 }
 
+func readAllSensors(tempsChan temps, hum *i2c.ADS1x15Driver, light *i2c.ADS1x15Driver, dht *dht.DHT) {
+	//Get temperatures
+	var data []dbSensorRow
+	var err error
+	data = getTemps(tempsChan)
+	for _, d := range data {
+		insertSensorDB(d)
+	}
+
+	//Get humidity
+	data = getI2CSensor(hum, 1)
+	for _, d := range data {
+		insertSensorDB(d)
+	}
+
+	//Get light
+	data = getI2CSensor(light, 2)
+	for _, d := range data {
+		insertSensorDB(d)
+	}
+
+	//Get DHT
+	data, err = readDHT22(dht)
+	if err != nil {
+		log.Println("NewDHT error:", err)
+	} else {
+		for _, d := range data {
+			insertSensorDB(d)
+		}
+	}
+}
+
 func SensorAcquisition(db *sql.DB) *gobot.Robot {
 	rpi := raspi.NewAdaptor()
-
-	var data []dbSensorRow
 
 	tempsChanIn = make(chan int)
 	tempsChanOut = make(chan map[string]float64)
@@ -287,35 +333,11 @@ func SensorAcquisition(db *sql.DB) *gobot.Robot {
 
 		go readOneWire(tempsChan)
 		updateDayNight()
-		gobot.Every(time.Second*30, func() {
+		readAllSensors(tempsChan, hum, light, dht)
+		time.Sleep(1 * time.Second)
+		gobot.Every(time.Second*900, func() {
 
-			//Get temperatures
-			data = getTemps(tempsChan)
-			for _, d := range data {
-				insertSensorDB(d)
-			}
-
-			//Get humidity
-			data = getI2CSensor(hum, 1)
-			for _, d := range data {
-				insertSensorDB(d)
-			}
-
-			//Get light
-			data = getI2CSensor(light, 2)
-			for _, d := range data {
-				insertSensorDB(d)
-			}
-
-			//Get DHT
-			data, err = readDHT22(dht)
-			if err != nil {
-				log.Println("NewDHT error:", err)
-			} else {
-				for _, d := range data {
-					insertSensorDB(d)
-				}
-			}
+			readAllSensors(tempsChan, hum, light, dht)
 
 		})
 
